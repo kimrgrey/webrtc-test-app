@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Page from 'components/Page';
 
-class Application extends Component {
-  render() {
-    return (
-      <MuiThemeProvider>
-        <div>
-          { this.props.children }
-        </div>
-      </MuiThemeProvider>
-    );
-  }
-}
+const Application = ({ children }) => (
+  <MuiThemeProvider>
+    <Page>
+      { children }
+    </Page>
+  </MuiThemeProvider>
+);
 
 export default Application;

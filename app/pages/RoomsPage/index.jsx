@@ -5,11 +5,12 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { fetchRooms } from 'actions/rooms';
+import { fetchRooms, createRoom, createRoomCancel } from 'actions/rooms';
 
 import Progress from 'components/Progress';
 import RoomsList from 'components/RoomsList';
 import RoomsListEmptyBanner from 'components/RoomsListEmptyBanner';
+import RoomDialog from 'components/RoomDialog';
 
 import Styles from './Styles.css';
 
@@ -24,6 +25,15 @@ class RoomsPage extends Component {
     return rooms.length ? <RoomsList rooms={ rooms } /> : <RoomsListEmptyBanner />;
   }
 
+  roomDialog() {
+    return (
+      <RoomDialog
+        open={ this.props.creatingRoom }
+        handleCancel={ this.props.createRoomCancel }
+      />
+    );
+  }
+
   pageContent() {
     const { loading, rooms } = this.props;
 
@@ -32,7 +42,10 @@ class RoomsPage extends Component {
 
   addRoomButton() {
     return (
-      <FloatingActionButton className={ Styles.action_button }>
+      <FloatingActionButton
+        className={ Styles.action_button }
+        onTouchTap={ this.props.createRoom }
+      >
         <ContentAdd />
       </FloatingActionButton>
     );
@@ -43,6 +56,7 @@ class RoomsPage extends Component {
       <div className={ Styles.container }>
         { this.pageContent() }
         { this.addRoomButton() }
+        { this.roomDialog() }
       </div>
     );
   }
@@ -50,7 +64,11 @@ class RoomsPage extends Component {
 
 const mapStateToProps = (state) => state.rooms;
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ fetchRooms }, dispatch);
+  return bindActionCreators({
+    fetchRooms,
+    createRoom,
+    createRoomCancel,
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomsPage);

@@ -4,7 +4,10 @@ import api from 'utils/api';
 const TYPES = createTypes('rooms', [
   'fetchRooms',
   'fetchRoomsSuccess',
-  'fetchRoomsFailure'
+  'fetchRoomsFailure',
+  'createRoom',
+  'createRoomCancel',
+  'createRoomSubmit',
 ]);
 
 export const fetchRooms = () => {
@@ -16,3 +19,6 @@ export const fetchRooms = () => {
       .catch((response) => dispatch({ type: TYPES.fetchRoomsFailure }));
   };
 };
+
+export const createRoom = () => ({ type: TYPES.createRoom });
+export const createRoomCancel = () => ({ type: TYPES.createRoomCancel });

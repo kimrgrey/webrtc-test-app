@@ -12,6 +12,7 @@ class RoomsList extends Component {
 
     const items = lodash.map(rooms, (r) => (
       <ListItem
+        key={ r.id }
         leftAvatar={
           <Avatar icon={ <AvVideoCall /> } />
         }

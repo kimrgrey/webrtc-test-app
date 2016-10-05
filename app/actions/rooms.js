@@ -8,6 +8,8 @@ const TYPES = createTypes('rooms', [
   'createRoom',
   'createRoomCancel',
   'createRoomSubmit',
+  'createRoomSuccess',
+  'createRoomFailure',
 ]);
 
 export const fetchRooms = () => {
@@ -21,4 +23,15 @@ export const fetchRooms = () => {
 };
 
 export const createRoom = () => ({ type: TYPES.createRoom });
+
+export const createRoomSubmit = (room) => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.createRoomSubmit });
+
+    api.post('/rooms', room)
+      .then(({ data }) => dispatch({ type: TYPES.createRoomSuccess, payload: data }))
+      .catch((response) => dispatch({ type: TYPES.createRoomFailure }));
+  };
+};
+
 export const createRoomCancel = () => ({ type: TYPES.createRoomCancel });

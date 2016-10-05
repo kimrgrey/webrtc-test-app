@@ -1,7 +1,7 @@
 {
-  "name": "react-project-template",
+  "name": "call-n-go-app",
   "version": "1.0.0",
-  "description": "React Project Template",
+  "description": "Call-n-Go Application",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --colors --hot --inline --history-api-fallback",

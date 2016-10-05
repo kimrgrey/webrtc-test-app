@@ -26,10 +26,27 @@ export const createRoomCancel = (state, action) => {
   return { ...state, creatingRoom: false };
 };
 
+export const createRoomSubmit = (state, action) => {
+  return { ...state, creatingRoom: true };
+};
+
+export const createRoomSuccess = (state, action) => {
+  const { rooms } = state;
+  rooms.push(action.payload);
+  return { ...state, rooms, creatingRoom: false };
+};
+
+export const createRoomFailure = (state, action) => {
+  return { ...state, creatingRoom: true };
+};
+
 export default composeReducer('rooms', {
   fetchRooms,
   fetchRoomsSuccess,
   fetchRoomsFailure,
   createRoom,
   createRoomCancel,
+  createRoomSubmit,
+  createRoomSuccess,
+  createRoomFailure,
 }, initialState);

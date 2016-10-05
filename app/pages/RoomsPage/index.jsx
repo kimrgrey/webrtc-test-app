@@ -5,7 +5,12 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { fetchRooms, createRoom, createRoomCancel } from 'actions/rooms';
+import {
+  fetchRooms,
+  createRoom,
+  createRoomSubmit,
+  createRoomCancel
+} from 'actions/rooms';
 
 import Progress from 'components/Progress';
 import RoomsList from 'components/RoomsList';
@@ -25,11 +30,15 @@ class RoomsPage extends Component {
     return rooms.length ? <RoomsList rooms={ rooms } /> : <RoomsListEmptyBanner />;
   }
 
+  createRoomSubmit = (room) => this.props.createRoomSubmit(room)
+  createRoomCancel = () => this.props.createRoomCancel()
+
   roomDialog() {
     return (
       <RoomDialog
         open={ this.props.creatingRoom }
-        handleCancel={ this.props.createRoomCancel }
+        onSubmit={ this.createRoomSubmit }
+        onCancel={ this.createRoomCancel }
       />
     );
   }
@@ -67,6 +76,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     fetchRooms,
     createRoom,
+    createRoomSubmit,
     createRoomCancel,
   }, dispatch);
 }

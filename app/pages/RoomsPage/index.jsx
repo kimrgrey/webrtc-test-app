@@ -13,7 +13,8 @@ import {
 } from 'actions/rooms';
 
 import Progress from 'components/Progress';
-import RoomsList from 'components/RoomsList';
+// import RoomsList from 'components/RoomsList';
+import RoomsGrid from 'components/RoomsGrid';
 import RoomsListEmptyBanner from 'components/RoomsListEmptyBanner';
 import RoomDialog from 'components/RoomDialog';
 
@@ -27,7 +28,8 @@ class RoomsPage extends Component {
   roomsView () {
     const { rooms } = this.props;
 
-    return rooms.length ? <RoomsList rooms={ rooms } /> : <RoomsListEmptyBanner />;
+    // return rooms.length ? <RoomsList rooms={ rooms } /> : <RoomsListEmptyBanner />;
+    return rooms.length ? <RoomsGrid rooms={ rooms } /> : <RoomsListEmptyBanner />;
   }
 
   createRoomSubmit = (room) => this.props.createRoomSubmit(room)

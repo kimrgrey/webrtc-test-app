@@ -29,18 +29,28 @@ class RoomsPage extends Component {
     const { rooms } = this.props;
 
     // return rooms.length ? <RoomsList rooms={ rooms } /> : <RoomsListEmptyBanner />;
-    return rooms.length ? <RoomsGrid rooms={ rooms } /> : <RoomsListEmptyBanner />;
+    if (rooms.length) {
+        return (
+          <RoomsGrid
+            rooms={ rooms }
+            onJoinRoom={ this.joinRoom }
+          />
+        );
+    }
+    else {
+      return <RoomsListEmptyBanner />;
+    }
   }
 
-  createRoomSubmit = (room) => this.props.createRoomSubmit(room)
-  createRoomCancel = () => this.props.createRoomCancel()
+  // TODO: replace with action
+  joinRoom = (roomId) => console.log('join room', roomId);
 
   roomDialog() {
     return (
       <RoomDialog
         open={ this.props.creatingRoom }
-        onSubmit={ this.createRoomSubmit }
-        onCancel={ this.createRoomCancel }
+        onSubmit={ this.props.createRoomSubmit }
+        onCancel={ this.props.createRoomCancel }
       />
     );
   }

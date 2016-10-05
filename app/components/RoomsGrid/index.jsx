@@ -7,6 +7,10 @@ import Styles from './Styles.css';
 
 
 class RoomsGrid extends Component {
+  handleRoomJoin = (roomId) => {
+    this.props.onJoinRoom(roomId);
+  };
+
   render() {
     const { rooms } = this.props;
 
@@ -20,6 +24,7 @@ class RoomsGrid extends Component {
           <IconButton
             tooltip={ 'Join Room' }
             tooltipPosition={ 'bottom-left' }
+            onTouchTap={ () => this.handleRoomJoin(r.id) }
           >
             <AvVideoCall color= { 'white' } />
           </IconButton>

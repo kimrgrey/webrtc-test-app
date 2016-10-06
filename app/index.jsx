@@ -5,11 +5,14 @@ import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Routes from './routes.jsx';
+
 import configureStore from 'utils/configureStore';
+import configureWebsocket from 'utils/configureWebsocket';
 
 import 'css/global.css'
 
 const store = configureStore();
+const websocket = configureWebsocket(store.dispatch);
 
 injectTapEventPlugin();
 

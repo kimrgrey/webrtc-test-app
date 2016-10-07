@@ -1,1 +1,1 @@
-# Call-n-Go Application
+# WebRTC Test Application

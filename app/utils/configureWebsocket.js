@@ -1,12 +1,9 @@
-import config from 'config';
 import { storeId } from 'actions/client';
+import { storeMembers } from 'actions/conference';
 
-const configureWebsocket = (dispatch) => {
-  const websocket = io(config.serverUrl);
-
+const configureWebsocket = (websocket, dispatch) => {
   websocket.on('registered', (message) => dispatch(storeId(message)));
-
-  return websocket;
+  websocket.on('members',    (message) => dispatch(storeMembers(message)));
 };
 
 export default configureWebsocket;

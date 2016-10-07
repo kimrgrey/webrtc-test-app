@@ -12,6 +12,10 @@ import {
   createRoomCancel
 } from 'actions/rooms';
 
+import { fetchId } from 'actions/client';
+
+import { joinRoom } from 'actions/conference';
+
 import Progress from 'components/Progress';
 // import RoomsList from 'components/RoomsList';
 import RoomsGrid from 'components/RoomsGrid';
@@ -22,6 +26,7 @@ import Styles from './Styles.css';
 
 class RoomsPage extends Component {
   componentDidMount() {
+    this.props.fetchId();
     this.props.fetchRooms();
   }
 
@@ -33,7 +38,7 @@ class RoomsPage extends Component {
         return (
           <RoomsGrid
             rooms={ rooms }
-            onJoinRoom={ this.joinRoom }
+            onJoinRoom={ this.props.joinRoom }
           />
         );
     }
@@ -41,9 +46,6 @@ class RoomsPage extends Component {
       return <RoomsListEmptyBanner />;
     }
   }
-
-  // TODO: replace with action
-  joinRoom = (roomId) => console.log('join room', roomId);
 
   roomDialog() {
     return (
@@ -86,10 +88,15 @@ class RoomsPage extends Component {
 const mapStateToProps = (state) => state.rooms;
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
+    fetchId,
+
     fetchRooms,
+
     createRoom,
     createRoomSubmit,
     createRoomCancel,
+
+    joinRoom,
   }, dispatch);
 }
 

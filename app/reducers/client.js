@@ -1,7 +1,11 @@
 import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {
-  id: '',
+  id: null,
+};
+
+export const fetchId = (state, action) => {
+  return { ...state, id: null };
 };
 
 export const storeId = (state, action) => {
@@ -10,5 +14,6 @@ export const storeId = (state, action) => {
 }
 
 export default composeReducer('client', {
+  fetchId,
   storeId,
 }, initialState);

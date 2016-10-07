@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "axios": "^0.14.0",
+    "freeice": "^2.2.0",
     "lodash": "^4.16.2",
     "material-ui": "^0.15.4",
     "react": "^15.3.2",

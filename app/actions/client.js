@@ -1,5 +1,5 @@
 import { createTypes } from 'redux-compose-reducer';
-import { websocket } from 'utils/websocket';
+import websocket from 'utils/websocket';
 
 
 const TYPES = createTypes('client', [

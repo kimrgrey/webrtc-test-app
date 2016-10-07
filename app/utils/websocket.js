@@ -1,5 +1,5 @@
 import config from 'config';
 
-const websocket = io(config.serverUrl);
+const websocket = io(config.signallingServer);
 
-export { websocket };
+export default websocket;

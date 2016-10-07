@@ -14,12 +14,9 @@ import {
 
 import { fetchId } from 'actions/client';
 
-import { joinRoom } from 'actions/conference';
-
+import Banner from 'components/Banner';
 import Progress from 'components/Progress';
-// import RoomsList from 'components/RoomsList';
 import RoomsGrid from 'components/RoomsGrid';
-import RoomsListEmptyBanner from 'components/RoomsListEmptyBanner';
 import RoomDialog from 'components/RoomDialog';
 
 import Styles from './Styles.css';
@@ -33,18 +30,7 @@ class RoomsPage extends Component {
   roomsView () {
     const { rooms } = this.props;
 
-    // return rooms.length ? <RoomsList rooms={ rooms } /> : <RoomsListEmptyBanner />;
-    if (rooms.length) {
-        return (
-          <RoomsGrid
-            rooms={ rooms }
-            onJoinRoom={ this.props.joinRoom }
-          />
-        );
-    }
-    else {
-      return <RoomsListEmptyBanner />;
-    }
+    return rooms.length ? <RoomsGrid rooms={ rooms } /> : <Banner text={ 'NO ROOMS' }/>;
   }
 
   roomDialog() {
@@ -95,8 +81,6 @@ const mapDispatchToProps = (dispatch) => {
     createRoom,
     createRoomSubmit,
     createRoomCancel,
-
-    joinRoom,
   }, dispatch);
 }
 

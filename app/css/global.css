@@ -5,3 +5,11 @@ body,
   margin: 0;
   height: 100% !important;
 }
+
+a:link {
+    color: white;
+}
+
+a:visited {
+    color: white;
+}

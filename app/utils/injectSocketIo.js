@@ -7,7 +7,7 @@ const injectSocketIo = (callback) => {
     console.log('socket.io loaded');
     callback();
   };
-  script.src = config.serverUrl + "/socket.io/socket.io.js";
+  script.src = config.signallingServer + "/socket.io/socket.io.js";
 
   document.getElementsByTagName('head')[0].appendChild(script);
 };

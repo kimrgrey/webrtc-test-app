@@ -1,11 +1,26 @@
 import { createTypes } from 'redux-compose-reducer';
-import { websocket } from 'utils/websocket';
+import api from 'utils/api';
+import websocket from 'utils/websocket';
+
 
 const TYPES = createTypes('conference', [
-  'storeMembers',
+  'fetchRoom',
+  'fetchRoomSuccess',
+  'fetchRoomFailure',
   'joinRoom',
   'leaveRoom',
+  'storeMembers',
 ]);
+
+export const fetchRoom = (id) => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.fetchRoom });
+
+    api.get('/rooms/' + id)
+      .then(({ data }) => dispatch({ type: TYPES.fetchRoomSuccess, payload: data }))
+      .catch((response) => dispatch({ type: TYPES.fetchRoomFailure }));
+  };
+};
 
 export const joinRoom = (room) => {
   return (dispatch) => {

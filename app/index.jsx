@@ -6,7 +6,7 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Routes from './routes.jsx';
 
-import { websocket } from 'utils/websocket';
+import websocket from 'utils/websocket';
 
 import configureStore from 'utils/configureStore';
 import configureWebsocket from 'utils/configureWebsocket';

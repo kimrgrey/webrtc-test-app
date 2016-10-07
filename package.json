@@ -1,7 +1,7 @@
 {
-  "name": "call-n-go-app",
+  "name": "webrtc-test-app",
   "version": "1.0.0",
-  "description": "Call-n-Go Application",
+  "description": "Test application for group video-chats",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --colors --hot --inline --history-api-fallback",

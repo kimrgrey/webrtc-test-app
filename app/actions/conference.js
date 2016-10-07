@@ -17,7 +17,10 @@ export const fetchRoom = (id) => {
     dispatch({ type: TYPES.fetchRoom });
 
     api.get('/rooms/' + id)
-      .then(({ data }) => dispatch({ type: TYPES.fetchRoomSuccess, payload: data }))
+      .then(({ data }) => {
+              dispatch({ type: TYPES.fetchRoomSuccess, payload: data });
+              dispatch(joinRoom(data));
+            })
       .catch((response) => dispatch({ type: TYPES.fetchRoomFailure }));
   };
 };

@@ -27,7 +27,7 @@ const joinRoom = (state, action) => {
 };
 
 const leaveRoom = (state, action) => {
-  return { ...state, room: {} };
+  return { ...state, members: [], room: {} };
 };
 
 export default composeReducer('conference', {

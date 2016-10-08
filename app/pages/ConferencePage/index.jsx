@@ -3,10 +3,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import CommunicationCallEnd from 'material-ui/svg-icons/communication/call-end';
+import { red500 } from 'material-ui/styles/colors';
+
 import Banner from 'components/Banner';
 import Progress from 'components/Progress';
 
-import { fetchRoom, joinRoom, leaveRoom } from 'actions/conference';
+import {
+  fetchRoom,
+  joinRoom,
+  leaveRoom,
+  leaveRoomWithRedirect
+} from 'actions/conference';
 
 import Styles from './Styles.css';
 
@@ -25,6 +34,21 @@ class ConferencePage extends Component {
     }
   }
 
+  leaveRoomButton() {
+    const { room } = this.props;
+
+    return (
+      <FloatingActionButton
+        backgroundColor={ red500 }
+        className={ Styles.action_button }
+        disabled={ room.id === undefined }
+        onTouchTap={ this.props.leaveRoomWithRedirect }
+      >
+        <CommunicationCallEnd />
+      </FloatingActionButton>
+    );
+  }
+
   pageContent() {
     const { loading, room } = this.props;
 
@@ -33,7 +57,7 @@ class ConferencePage extends Component {
     }
     else {
       if (room.id !== undefined) {
-        return <Banner text={ 'ROOM FOUND' } />;
+        return <Banner text={ room.name } />;
       }
       else {
         return <Banner text={ 'ROOM NOT FOUND' } />;
@@ -45,6 +69,7 @@ class ConferencePage extends Component {
     return (
       <div className={ Styles.container }>
         { this.pageContent() }
+        { this.leaveRoomButton() }
       </div>
     );
   }
@@ -57,6 +82,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchRoom,
     joinRoom,
     leaveRoom,
+    leaveRoomWithRedirect,
   }, dispatch);
 };
 

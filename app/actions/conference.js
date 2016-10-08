@@ -1,4 +1,5 @@
 import { createTypes } from 'redux-compose-reducer';
+import { push } from 'react-router-redux';
 import api from 'utils/api';
 import websocket from 'utils/websocket';
 
@@ -9,6 +10,7 @@ const TYPES = createTypes('conference', [
   'fetchRoomFailure',
   'joinRoom',
   'leaveRoom',
+  'leaveRoomWithRedirect',
   'storeMembers',
 ]);
 
@@ -36,6 +38,13 @@ export const leaveRoom = () => {
   return (dispatch) => {
     dispatch({ type: TYPES.leaveRoom });
     websocket.emit('leave');
+  };
+};
+
+export const leaveRoomWithRedirect = () => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.leaveRoomWithRedirect });
+    dispatch(push('/'));
   };
 };
 

@@ -4,7 +4,7 @@ navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.mozGetUserMedia;
 
 var streamConstraints = {
-  audio: true,
+  audio: false,
   video: true,
 };
 

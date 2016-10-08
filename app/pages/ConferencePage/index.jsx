@@ -9,6 +9,7 @@ import { red500 } from 'material-ui/styles/colors';
 
 import Banner from 'components/Banner';
 import Progress from 'components/Progress';
+import Video from 'components/Video';
 
 import {
   fetchRoom,
@@ -55,6 +56,17 @@ class ConferencePage extends Component {
     );
   }
 
+  localVideo() {
+    const { localStream } = this.props;
+    var videoSource = "";
+    if (localStream.stream) {
+      videoSource = window.URL ? window.URL.createObjectURL(localStream.stream)
+                               : localStream.stream;
+    }
+
+    return <Video className={ Styles.localVideo } src={ videoSource } />;
+  }
+
   pageContent() {
     const { loading, room } = this.props;
 
@@ -75,6 +87,7 @@ class ConferencePage extends Component {
     return (
       <div className={ Styles.container }>
         { this.pageContent() }
+        { this.localVideo() }
         { this.leaveRoomButton() }
       </div>
     );

@@ -2,16 +2,24 @@ import { createTypes } from 'redux-compose-reducer';
 import { push } from 'react-router-redux';
 import api from 'utils/api';
 import websocket from 'utils/websocket';
+import localStream from 'utils/localStream';
 
 
 const TYPES = createTypes('conference', [
   'fetchRoom',
   'fetchRoomSuccess',
   'fetchRoomFailure',
+
   'joinRoom',
   'leaveRoom',
   'leaveRoomWithRedirect',
+
   'storeMembers',
+
+  'getLocalStream',
+  'getLocalStreamSuccess',
+  'getLocalStreamFailure',
+  'closeLocalStream',
 ]);
 
 export const fetchRoom = (id) => {
@@ -50,4 +58,21 @@ export const leaveRoomWithRedirect = () => {
 
 export const storeMembers = (message) => {
   return { type: TYPES.storeMembers, payload: JSON.parse(message) };
+};
+
+export const getLocalStream = () => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.getLocalStream });
+
+    localStream.getLocalStream()
+      .then((stream) => dispatch({ type: TYPES.getLocalStreamSuccess, payload: stream }))
+      .catch((error) => dispatch({ type: TYPES.getLocalStreamFailure, payload: error }));
+  };
+};
+
+export const closeLocalStream = (stream) => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.closeLocalStream });
+    stream.getTracks().forEach((track) => track.stop());
+  };
 };

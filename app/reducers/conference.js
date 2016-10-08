@@ -1,9 +1,10 @@
 import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {
+  loading: false,
   members: [],
   room: {},
-  loading: false,
+  localStream: {},
 };
 
 const fetchRoom = (state, action) => {
@@ -30,11 +31,34 @@ const leaveRoom = (state, action) => {
   return { ...state, members: [], room: {} };
 };
 
+const getLocalStream = (state, action) => {
+  return { ...state, localStream: {} };
+};
+
+const getLocalStreamSuccess = (state, action) => {
+  return { ...state, localStream: { stream: action.payload } };
+};
+
+const getLocalStreamFailure = (state, action) => {
+  return { ...state, localStream: { error: action.payload } };
+};
+
+const closeLocalStream = (state, action) => {
+  return { ...state, localStream: {} };
+};
+
 export default composeReducer('conference', {
   fetchRoom,
   fetchRoomSuccess,
   fetchRoomFailure,
+
   joinRoom,
   leaveRoom,
+
   storeMembers,
+
+  getLocalStream,
+  getLocalStreamSuccess,
+  getLocalStreamFailure,
+  closeLocalStream,
 }, initialState);

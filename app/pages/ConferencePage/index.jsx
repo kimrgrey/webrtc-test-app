@@ -14,7 +14,9 @@ import {
   fetchRoom,
   joinRoom,
   leaveRoom,
-  leaveRoomWithRedirect
+  leaveRoomWithRedirect,
+  getLocalStream,
+  closeLocalStream,
 } from 'actions/conference';
 
 import Styles from './Styles.css';
@@ -24,13 +26,18 @@ class ConferencePage extends Component {
   componentDidMount() {
     const { roomId } = this.props.params;
     this.props.fetchRoom(roomId);
+    this.props.getLocalStream();
   }
 
   componentWillUnmount() {
-    const { room } = this.props;
+    const { room, localStream } = this.props;
 
     if (room.id !== undefined) {
       this.props.leaveRoom();
+    }
+
+    if (localStream.stream !== undefined) {
+      this.props.closeLocalStream(localStream.stream);
     }
   }
 
@@ -41,7 +48,6 @@ class ConferencePage extends Component {
       <FloatingActionButton
         backgroundColor={ red500 }
         className={ Styles.action_button }
-        disabled={ room.id === undefined }
         onTouchTap={ this.props.leaveRoomWithRedirect }
       >
         <CommunicationCallEnd />
@@ -83,6 +89,8 @@ const mapDispatchToProps = (dispatch) => {
     joinRoom,
     leaveRoom,
     leaveRoomWithRedirect,
+    getLocalStream,
+    closeLocalStream,
   }, dispatch);
 };
 

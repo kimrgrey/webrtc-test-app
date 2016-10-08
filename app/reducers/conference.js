@@ -5,6 +5,7 @@ const initialState = {
   members: [],
   room: {},
   localStream: {},
+  remoteStreams: [],
 };
 
 const fetchRoom = (state, action) => {

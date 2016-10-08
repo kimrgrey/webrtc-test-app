@@ -10,6 +10,7 @@ import { red500 } from 'material-ui/styles/colors';
 import Banner from 'components/Banner';
 import Progress from 'components/Progress';
 import Video from 'components/Video';
+import VideoGroup from 'components/VideoGroup';
 
 import {
   fetchRoom,
@@ -68,14 +69,14 @@ class ConferencePage extends Component {
   }
 
   pageContent() {
-    const { loading, room } = this.props;
+    const { loading, room, remoteStreams } = this.props;
 
     if (loading) {
       return <Progress />;
     }
     else {
       if (room.id !== undefined) {
-        return <Banner text={ room.name } />;
+        return <VideoGroup videoSources={ remoteStreams } />
       }
       else {
         return <Banner text={ 'ROOM NOT FOUND' } />;

@@ -5,7 +5,7 @@ const initialState = {
   members: [],
   room: null,
   localStream: null,
-  remoteStreams: [],
+  remoteStreams: {},
 };
 
 const storeMembers = (state, action) => {
@@ -36,9 +36,13 @@ const leaveRoom = (state, action) => {
     ...state,
     localStream: null,
     members: [],
-    remoteStreams: [],
+    remoteStreams: {},
     room: null,
   };
+};
+
+const updateRemoteStreams = (state, action) => {
+  return { ...state, remoteStreams: action.payload };
 };
 
 export default composeReducer('conference', {
@@ -49,4 +53,6 @@ export default composeReducer('conference', {
   leaveRoom,
 
   storeMembers,
+
+  updateRemoteStreams,
 }, initialState);

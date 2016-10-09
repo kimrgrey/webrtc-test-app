@@ -11,11 +11,15 @@ import websocket from 'utils/websocket';
 import configureStore from 'utils/configureStore';
 import configureWebsocket from 'utils/configureWebsocket';
 
+import peersStore from 'utils/peersStore';
+
 import 'css/global.css'
 
 const store = configureStore();
 
 configureWebsocket(websocket, store.dispatch);
+
+peersStore.init(store.dispatch);
 
 injectTapEventPlugin();
 

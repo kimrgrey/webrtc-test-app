@@ -1,7 +1,6 @@
 
 var streamConstraints = {
-  // FIXME: get user audio, mute local stream view
-  audio: false,
+  audio: true,
   video: true,
 };
 

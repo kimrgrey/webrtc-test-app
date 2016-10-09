@@ -9,8 +9,7 @@ export const fetchId = (state, action) => {
 };
 
 export const storeId = (state, action) => {
-  const { id } = action.payload;
-  return { ...state, id };
+  return { ...state, id: action.payload };
 }
 
 export default composeReducer('application', {

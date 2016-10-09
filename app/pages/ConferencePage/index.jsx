@@ -49,13 +49,20 @@ class ConferencePage extends Component {
 
   localVideo() {
     const { localStream } = this.props;
+
     var videoSource = "";
     if (localStream) {
       videoSource = window.URL ? window.URL.createObjectURL(localStream)
                                : localStream;
     }
 
-    return <Video className={ Styles.localVideo } src={ videoSource } />;
+    return (
+      <Video
+        className={ Styles.localVideo }
+        src={ videoSource }
+        muted
+      />
+    );
   }
 
   pageContent() {
@@ -69,7 +76,7 @@ class ConferencePage extends Component {
         return <VideoGroup videoSources={ remoteStreams } />
       }
       else {
-        return <Banner text={ 'ROOM NOT FOUND' } />;
+        return <Banner text={ 'ROOM CONNECTION ERROR' } />;
       }
     }
   }

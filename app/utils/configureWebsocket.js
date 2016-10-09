@@ -1,9 +1,17 @@
 import { storeId } from 'actions/application';
-import { storeMembers } from 'actions/conference';
+import {
+  storeMembers,
+  connectPeer,
+  disconnectPeer,
+  processWebRTC,
+} from 'actions/conference';
 
 const configureWebsocket = (websocket, dispatch) => {
   websocket.on('registered', (message) => dispatch(storeId(message)));
   websocket.on('members',    (message) => dispatch(storeMembers(message)));
+  websocket.on('joined',     (message) => dispatch(connectPeer(message)));
+  websocket.on('left',       (message) => dispatch(disconnectPeer(message)));
+  websocket.on('webrtc',     (message) => dispatch(processWebRTC(message)));
 };
 
 export default configureWebsocket;

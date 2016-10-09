@@ -1,5 +1,6 @@
 import { createTypes } from 'redux-compose-reducer';
 import websocket from 'utils/websocket';
+import peersStore from 'utils/peersStore';
 
 
 const TYPES = createTypes('application', [
@@ -15,5 +16,9 @@ export const fetchId = () => {
 };
 
 export const storeId = (message) => {
-  return { type: TYPES.storeId, payload: JSON.parse(message) };
+  return (dispatch) => {
+    const { id } = JSON.parse(message);
+    dispatch({ type: TYPES.storeId, payload: id });
+    peersStore.setLocalId(id);
+  };
 };

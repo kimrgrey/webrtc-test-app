@@ -12,8 +12,6 @@ import {
   createRoomCancel
 } from 'actions/rooms';
 
-import { fetchId } from 'actions/client';
-
 import Banner from 'components/Banner';
 import Progress from 'components/Progress';
 import RoomsGrid from 'components/RoomsGrid';
@@ -23,7 +21,6 @@ import Styles from './Styles.css';
 
 class RoomsPage extends Component {
   componentDidMount() {
-    this.props.fetchId();
     this.props.fetchRooms();
   }
 
@@ -74,10 +71,7 @@ class RoomsPage extends Component {
 const mapStateToProps = (state) => state.rooms;
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    fetchId,
-
     fetchRooms,
-
     createRoom,
     createRoomSubmit,
     createRoomCancel,

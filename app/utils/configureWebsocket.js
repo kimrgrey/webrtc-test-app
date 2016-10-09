@@ -1,4 +1,4 @@
-import { storeId } from 'actions/client';
+import { storeId } from 'actions/application';
 import { storeMembers } from 'actions/conference';
 
 const configureWebsocket = (websocket, dispatch) => {

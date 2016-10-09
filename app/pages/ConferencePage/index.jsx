@@ -13,12 +13,9 @@ import Video from 'components/Video';
 import VideoGroup from 'components/VideoGroup';
 
 import {
-  fetchRoom,
   joinRoom,
   leaveRoom,
   leaveRoomWithRedirect,
-  getLocalStream,
-  closeLocalStream,
 } from 'actions/conference';
 
 import Styles from './Styles.css';
@@ -27,20 +24,13 @@ import Styles from './Styles.css';
 class ConferencePage extends Component {
   componentDidMount() {
     const { roomId } = this.props.params;
-    this.props.fetchRoom(roomId);
-    this.props.getLocalStream();
+    this.props.joinRoom(roomId);
   }
 
   componentWillUnmount() {
     const { room, localStream } = this.props;
 
-    if (room.id !== undefined) {
-      this.props.leaveRoom();
-    }
-
-    if (localStream.stream !== undefined) {
-      this.props.closeLocalStream(localStream.stream);
-    }
+    room && this.props.leaveRoom(room.id, localStream);
   }
 
   leaveRoomButton() {
@@ -60,22 +50,22 @@ class ConferencePage extends Component {
   localVideo() {
     const { localStream } = this.props;
     var videoSource = "";
-    if (localStream.stream) {
-      videoSource = window.URL ? window.URL.createObjectURL(localStream.stream)
-                               : localStream.stream;
+    if (localStream) {
+      videoSource = window.URL ? window.URL.createObjectURL(localStream)
+                               : localStream;
     }
 
     return <Video className={ Styles.localVideo } src={ videoSource } />;
   }
 
   pageContent() {
-    const { loading, room, remoteStreams } = this.props;
+    const { connecting, room, remoteStreams } = this.props;
 
-    if (loading) {
+    if (connecting) {
       return <Progress />;
     }
     else {
-      if (room.id !== undefined) {
+      if (room) {
         return <VideoGroup videoSources={ remoteStreams } />
       }
       else {
@@ -99,12 +89,9 @@ const mapStateToProps = (state) => state.conference;
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    fetchRoom,
     joinRoom,
     leaveRoom,
     leaveRoomWithRedirect,
-    getLocalStream,
-    closeLocalStream,
   }, dispatch);
 };
 

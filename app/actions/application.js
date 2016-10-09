@@ -2,7 +2,7 @@ import { createTypes } from 'redux-compose-reducer';
 import websocket from 'utils/websocket';
 
 
-const TYPES = createTypes('client', [
+const TYPES = createTypes('application', [
   'fetchId',
   'storeId',
 ]);

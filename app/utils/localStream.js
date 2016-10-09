@@ -1,17 +1,21 @@
 
-navigator.getUserMedia = navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia;
-
 var streamConstraints = {
+  // FIXME: get user audio, mute local stream view
   audio: false,
   video: true,
 };
 
 const getLocalStream = () => {
-  return new Promise((resolve, reject) => {
-    navigator.getUserMedia(streamConstraints, resolve, reject);
-  });
+  return navigator.mediaDevices.getUserMedia(streamConstraints);
 };
 
-export default { getLocalStream };
+const closeLocalStream = (stream) => {
+  if (stream) {
+    stream.getTracks().forEach((t) => t.stop());
+  }
+};
+
+export default {
+  getLocalStream,
+  closeLocalStream,
+};

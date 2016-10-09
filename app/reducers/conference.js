@@ -1,23 +1,11 @@
 import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {
-  loading: false,
+  connecting: false,
   members: [],
-  room: {},
-  localStream: {},
+  room: null,
+  localStream: null,
   remoteStreams: [],
-};
-
-const fetchRoom = (state, action) => {
-  return { ...state, room: {}, loading: true };
-};
-
-const fetchRoomSuccess = (state, action) => {
-  return { ...state, room: action.payload, loading: false };
-};
-
-const fetchRoomFailure = (state, action) => {
-  return { ...state, room: {}, loading: false };
 };
 
 const storeMembers = (state, action) => {
@@ -25,41 +13,40 @@ const storeMembers = (state, action) => {
 };
 
 const joinRoom = (state, action) => {
-  return {  ...state, room: action.payload };
+  return { ...state, connecting: true };
+};
+
+const joinRoomSuccess = (state, action) => {
+  const { room, localStream } = action.payload;
+
+  return {
+    ...state,
+    connecting: false,
+    localStream,
+    room,
+  };
+};
+
+const joinRoomFailure = (state, action) => {
+  return { ...state, connecting: false };
 };
 
 const leaveRoom = (state, action) => {
-  return { ...state, members: [], room: {} };
-};
-
-const getLocalStream = (state, action) => {
-  return { ...state, localStream: {} };
-};
-
-const getLocalStreamSuccess = (state, action) => {
-  return { ...state, localStream: { stream: action.payload } };
-};
-
-const getLocalStreamFailure = (state, action) => {
-  return { ...state, localStream: { error: action.payload } };
-};
-
-const closeLocalStream = (state, action) => {
-  return { ...state, localStream: {} };
+  return {
+    ...state,
+    localStream: null,
+    members: [],
+    remoteStreams: [],
+    room: null,
+  };
 };
 
 export default composeReducer('conference', {
-  fetchRoom,
-  fetchRoomSuccess,
-  fetchRoomFailure,
-
   joinRoom,
+  joinRoomSuccess,
+  joinRoomFailure,
+
   leaveRoom,
 
   storeMembers,
-
-  getLocalStream,
-  getLocalStreamSuccess,
-  getLocalStreamFailure,
-  closeLocalStream,
 }, initialState);

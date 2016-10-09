@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-import rooms from './rooms';
-import client from './client';
+import application from './application';
 import conference from './conference';
+import rooms from './rooms';
 
 
 const rootReducer = combineReducers({
-  rooms,
-  client,
+  application,
   conference,
+  rooms,
   routing: routerReducer,
 });
 

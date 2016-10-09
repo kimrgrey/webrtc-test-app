@@ -13,7 +13,7 @@ export const storeId = (state, action) => {
   return { ...state, id };
 }
 
-export default composeReducer('client', {
+export default composeReducer('application', {
   fetchId,
   storeId,
 }, initialState);

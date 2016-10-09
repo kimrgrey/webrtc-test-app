@@ -6,45 +6,37 @@ import localStream from 'utils/localStream';
 
 
 const TYPES = createTypes('conference', [
-  'fetchRoom',
-  'fetchRoomSuccess',
-  'fetchRoomFailure',
-
   'joinRoom',
+  'joinRoomSuccess',
+  'joinRoomFailure',
+
   'leaveRoom',
   'leaveRoomWithRedirect',
 
   'storeMembers',
-
-  'getLocalStream',
-  'getLocalStreamSuccess',
-  'getLocalStreamFailure',
-  'closeLocalStream',
 ]);
 
-export const fetchRoom = (id) => {
+export const joinRoom = (id) => {
   return (dispatch) => {
-    dispatch({ type: TYPES.fetchRoom });
+
+    const payload = {};
+
+    dispatch({ type: TYPES.joinRoom });
 
     api.get('/rooms/' + id)
-      .then(({ data }) => {
-              dispatch({ type: TYPES.fetchRoomSuccess, payload: data });
-              dispatch(joinRoom(data));
-            })
-      .catch((response) => dispatch({ type: TYPES.fetchRoomFailure }));
+      .then(({ data }) => { payload.room = data })
+      .then(()         => ( localStream.getLocalStream() ))
+      .then((stream)   => { payload.localStream = stream })
+      .then(()         => { websocket.emit('join', JSON.stringify({ id })) })
+      .then(()         => dispatch({ type: TYPES.joinRoomSuccess, payload }))
+      .catch(()        => dispatch({ type: TYPES.joinRoomFailure }));
   };
 };
 
-export const joinRoom = (room) => {
-  return (dispatch) => {
-    dispatch({ type: TYPES.joinRoom, payload: room });
-    websocket.emit('join', JSON.stringify(room));
-  };
-};
-
-export const leaveRoom = () => {
+export const leaveRoom = (roomId, stream) => {
   return (dispatch) => {
     dispatch({ type: TYPES.leaveRoom });
+    localStream.closeLocalStream(stream);
     websocket.emit('leave');
   };
 };
@@ -58,21 +50,4 @@ export const leaveRoomWithRedirect = () => {
 
 export const storeMembers = (message) => {
   return { type: TYPES.storeMembers, payload: JSON.parse(message) };
-};
-
-export const getLocalStream = () => {
-  return (dispatch) => {
-    dispatch({ type: TYPES.getLocalStream });
-
-    localStream.getLocalStream()
-      .then((stream) => dispatch({ type: TYPES.getLocalStreamSuccess, payload: stream }))
-      .catch((error) => dispatch({ type: TYPES.getLocalStreamFailure, payload: error }));
-  };
-};
-
-export const closeLocalStream = (stream) => {
-  return (dispatch) => {
-    dispatch({ type: TYPES.closeLocalStream });
-    stream.getTracks().forEach((track) => track.stop());
-  };
 };

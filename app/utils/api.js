@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from 'config';
 
 const api = axios.create({
-  baseURL: config.signallingServer,
+  baseURL: config.apiUrl,
   timeout: 3000,
   headers: {
     'Accept': 'application/json',

@@ -4,7 +4,7 @@ var instance = null;
 
 const websocket = () => {
   if (instance === null) {
-    instance = io(config.signallingServer);
+    instance = io(config.wsUrl);
   }
   return instance;
 };

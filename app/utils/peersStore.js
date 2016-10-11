@@ -57,7 +57,7 @@ const createConnection = (remoteId) => {
 
   pc.onicecandidate = (event) => {
     if (event.candidate) {
-      websocket.emit('webrtc', JSON.stringify({
+      websocket().emit('webrtc', JSON.stringify({
         type: 'new-ice-candidate',
         sender: peersStore.localId,
         receiver: remoteId,
@@ -116,7 +116,7 @@ const handleClientJoined = (message) => {
       .then((offer) => ( remoteConnection.setLocalDescription(offer) ))
       .then(() => {
         console.log('sending video offer to', remoteId);
-        websocket.emit('webrtc', JSON.stringify({
+        websocket().emit('webrtc', JSON.stringify({
           type: 'video-offer',
           sender: peersStore.localId,
           receiver: remoteId,
@@ -157,7 +157,7 @@ const handleWebRTCMessage = (message) => {
         .then((answer) => remoteConnection.setLocalDescription(answer))
         .then(() => {
           console.log('sending video answer to', sender);
-          websocket.emit('webrtc', JSON.stringify({
+          websocket().emit('webrtc', JSON.stringify({
             type: 'video-answer',
             sender: peersStore.localId,
             receiver: sender,

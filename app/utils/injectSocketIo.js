@@ -4,7 +4,6 @@ const injectSocketIo = (callback) => {
   var script = document.createElement('script');
 
   script.onload = () => {
-    console.log('socket.io loaded');
     callback();
   };
   script.src = config.signallingServer + "/socket.io/socket.io.js";

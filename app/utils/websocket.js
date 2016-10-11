@@ -1,5 +1,12 @@
 import config from 'config';
 
-const websocket = io(config.signallingServer);
+var instance = null;
+
+const websocket = () => {
+  if (instance === null) {
+    instance = io(config.signallingServer);
+  }
+  return instance;
+};
 
 export default websocket;

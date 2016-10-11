@@ -4,8 +4,12 @@ import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import Routes from './routes.jsx';
 
+import { fetchId } from 'actions/application';
+
+import injectSocketIo from 'utils/injectSocketIo';
 import websocket from 'utils/websocket';
 
 import configureStore from 'utils/configureStore';
@@ -17,7 +21,11 @@ import 'css/global.css'
 
 const store = configureStore();
 
-configureWebsocket(websocket, store.dispatch);
+injectSocketIo(() => {
+  configureWebsocket(websocket(), store.dispatch);
+  store.dispatch(fetchId());
+});
+
 
 peersStore.init(store.dispatch);
 

@@ -37,7 +37,7 @@ export const joinRoom = (id) => {
         payload.localStream = stream;
         peersStore.setLocalStream(stream);
       })
-      .then(()         => { websocket.emit('join', JSON.stringify({ id })) })
+      .then(()         => { websocket().emit('join', JSON.stringify({ id })) })
       .then(()         => dispatch({ type: TYPES.joinRoomSuccess, payload }))
       .catch(()        => dispatch({ type: TYPES.joinRoomFailure }));
   };
@@ -48,7 +48,7 @@ export const leaveRoom = (roomId, stream) => {
     dispatch({ type: TYPES.leaveRoom });
     peersStore.cleanup();
     localStream.closeLocalStream(stream);
-    websocket.emit('leave');
+    websocket().emit('leave');
   };
 };
 

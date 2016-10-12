@@ -3,6 +3,13 @@ import websocket from 'utils/websocket';
 
 import { handleRemoteStream } from 'actions/conference';
 
+const sdpConstraints = {
+  mandatory: {
+    OfferToReceiveAudio: true,
+    OfferToReceiveVideo: true,
+  }
+};
+
 const peersStore = {
   dispatch: null,
   localId: null,
@@ -109,7 +116,7 @@ const handleClientJoined = (message) => {
 
   // TODO: deal with RTCPeerConnection.negotiationneeded
   // remoteConnection.negotiationneeded = (event) => {
-  remoteConnection.createOffer()
+  remoteConnection.createOffer(sdpConstraints)
     .then((offer) => ( remoteConnection.setLocalDescription(offer) ))
     .then(() => {
       console.log('sending video offer to', remoteId);
@@ -148,7 +155,7 @@ const handleWebRTCMessage = (message) => {
       remoteConnection = createConnection(sender);
 
       remoteConnection.setRemoteDescription(new RTCSessionDescription(sdp))
-        .then(() => ( remoteConnection.createAnswer() ))
+        .then(() => ( remoteConnection.createAnswer(sdpConstraints) ))
         .then((answer) => remoteConnection.setLocalDescription(answer))
         .then(() => {
           console.log('sending video answer to', sender);

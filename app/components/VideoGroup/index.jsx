@@ -6,18 +6,27 @@ import Styles from './Styles.css';
 
 class VideoGroup extends Component {
   render() {
-    const { videoSources } = this.props;
+    const { members, remoteStreams } = this.props;
 
-    const videoFrames = lodash.map(videoSources, ({ id, stream }) => {
-      const videoSource = window.URL ? window.URL.createObjectURL(stream)
-                                     : stream;
-      return (
-        <Video
-          key={ id }
-          src={ videoSource }
-          className={ Styles.video }
-        />
-      );
+    const videoFrames = lodash.map(Object.keys(members), (memberId) => {
+      const stream = remoteStreams[memberId];
+
+      if (stream) {
+        const videoSource = window.URL ? window.URL.createObjectURL(stream)
+                                       : stream;
+        return (
+          <Video
+            key={ memberId }
+            src={ videoSource }
+            className={ Styles.video }
+          />
+        );
+      }
+      else {
+        return (
+          <div key={ memberId } className={ Styles.videoPlaceholder } />
+        );
+      }
     });
 
     return (

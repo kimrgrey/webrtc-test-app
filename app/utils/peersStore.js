@@ -1,6 +1,7 @@
 import config from 'config';
 import websocket from 'utils/websocket';
-import { updateRemoteStreams } from 'actions/conference';
+
+import { handleRemoteStream } from 'actions/conference';
 
 const peersStore = {
   dispatch: null,
@@ -33,12 +34,6 @@ const setLocalId = (id) => {
   peersStore.localId = id;
 };
 
-const getRemoteStreams = () => {
-  return Object.keys(peersStore.remoteStreams).map((remoteId) => {
-    return { id: remoteId, stream: peersStore.remoteStreams[remoteId] };
-  });
-};
-
 const createConnection = (remoteId) => {
   const pc = new RTCPeerConnection(config.peerConnectionConfig);
 
@@ -68,14 +63,16 @@ const createConnection = (remoteId) => {
 
   if (pc.addTrack) {
     pc.ontrack = (event) => {
-      peersStore.remoteStreams[remoteId] = event.streams[0];
-      peersStore.dispatch(updateRemoteStreams());
+      const stream = event.streams[0];
+      peersStore.remoteStreams[remoteId] = stream;
+      peersStore.dispatch(handleRemoteStream({ id: remoteId, stream  }));
     };
   }
   else {
     pc.onaddstream = (event) => {
-      peersStore.remoteStreams[remoteId] = event.stream;
-      peersStore.dispatch(updateRemoteStreams());
+      const { stream } = event;
+      peersStore.remoteStreams[remoteId] = stream;
+      peersStore.dispatch(handleRemoteStream({ id: remoteId, stream }));
     };
   }
 
@@ -112,20 +109,20 @@ const handleClientJoined = (message) => {
 
   // TODO: deal with RTCPeerConnection.negotiationneeded
   // remoteConnection.negotiationneeded = (event) => {
-    remoteConnection.createOffer()
-      .then((offer) => ( remoteConnection.setLocalDescription(offer) ))
-      .then(() => {
-        console.log('sending video offer to', remoteId);
-        websocket().emit('webrtc', JSON.stringify({
-          type: 'video-offer',
-          sender: peersStore.localId,
-          receiver: remoteId,
-          sdp: remoteConnection.localDescription,
-        }));
-      })
-      .catch((desc) => {
-        console.log('handle client join error:', desc);
-      });
+  remoteConnection.createOffer()
+    .then((offer) => ( remoteConnection.setLocalDescription(offer) ))
+    .then(() => {
+      console.log('sending video offer to', remoteId);
+      websocket().emit('webrtc', JSON.stringify({
+        type: 'video-offer',
+        sender: peersStore.localId,
+        receiver: remoteId,
+        sdp: remoteConnection.localDescription,
+      }));
+    })
+    .catch((desc) => {
+      console.log('handle client join error:', desc);
+    });
   // };
 };
 
@@ -138,8 +135,6 @@ const handleClientLeft = (message) => {
 
   delete peersStore.remoteStreams[remoteId];
   delete peersStore.connections[remoteId];
-
-  peersStore.dispatch(updateRemoteStreams());
 };
 
 const handleWebRTCMessage = (message) => {
@@ -196,7 +191,6 @@ export default {
   cleanup,
   setLocalStream,
   setLocalId,
-  getRemoteStreams,
   handleClientJoined,
   handleClientLeft,
   handleWebRTCMessage,

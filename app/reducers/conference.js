@@ -1,10 +1,11 @@
+import lodash from 'lodash';
 import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {
   connecting: false,
-  members: [],
   room: null,
   localStream: null,
+  members: {},
   remoteStreams: {},
 };
 
@@ -35,14 +36,35 @@ const leaveRoom = (state, action) => {
   return {
     ...state,
     localStream: null,
-    members: [],
-    remoteStreams: {},
     room: null,
+    members: {},
+    remoteStreams: {},
   };
 };
 
-const updateRemoteStreams = (state, action) => {
-  return { ...state, remoteStreams: action.payload };
+const connectPeer = (state, action) => {
+  const client = action.payload;
+  const { members } = state;
+
+  return { ...state, members: { ...members, [client.id] : client } };
+};
+
+const disconnectPeer = (state, action) => {
+  const client = action.payload;
+  const { members } = state;
+
+  delete members[client.id];
+
+  return { ...state, members: { ...members } };
+};
+
+const handleRemoteStream = (state, action) => {
+  const { id, stream } = action.payload;
+  const { remoteStreams } = state;
+
+  remoteStreams[id] = stream;
+
+  return { ...state, remoteStreams: { ...remoteStreams, [id] : stream } };
 };
 
 export default composeReducer('conference', {
@@ -54,5 +76,8 @@ export default composeReducer('conference', {
 
   storeMembers,
 
-  updateRemoteStreams,
+  connectPeer,
+  disconnectPeer,
+
+  handleRemoteStream,
 }, initialState);

@@ -20,7 +20,7 @@ const TYPES = createTypes('conference', [
   'disconnectPeer',
   'processWebRTC',
 
-  'updateRemoteStreams',
+  'handleRemoteStream',
 ]);
 
 export const joinRoom = (id) => {
@@ -32,7 +32,7 @@ export const joinRoom = (id) => {
 
     api.get('/rooms/' + id)
       .then(({ data }) => { payload.room = data })
-      .then(()         => ( localStream.getLocalStream() ))
+      .then(()         => ( localStream.getLocalStream().catch(() => (null)) ))
       .then((stream)   => {
         payload.localStream = stream;
         peersStore.setLocalStream(stream);
@@ -64,17 +64,25 @@ export const storeMembers = (message) => {
 };
 
 export const connectPeer = (message) => {
+  const client = JSON.parse(message);
+
   return (dispatch) => {
-    dispatch({ type: TYPES.connectPeer });
+    dispatch({ type: TYPES.connectPeer, payload: client });
     peersStore.handleClientJoined(message);
   };
 };
 
 export const disconnectPeer = (message) => {
+  const client = JSON.parse(message);
+
   return (dispatch) => {
-    dispatch({ type: TYPES.disconnectPeer });
+    dispatch({ type: TYPES.disconnectPeer, payload: client });
     peersStore.handleClientLeft(message);
   };
+};
+
+export const handleRemoteStream = (client) => {
+  return { type: TYPES.handleRemoteStream, payload: client };
 };
 
 export const processWebRTC = (message) => {
@@ -83,7 +91,3 @@ export const processWebRTC = (message) => {
     peersStore.handleWebRTCMessage(message);
   };
 };
-
-export const updateRemoteStreams = () => (
-  { type: TYPES.updateRemoteStreams, payload: peersStore.getRemoteStreams() }
-);

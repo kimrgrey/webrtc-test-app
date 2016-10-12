@@ -50,30 +50,32 @@ class ConferencePage extends Component {
   localVideo() {
     const { localStream } = this.props;
 
-    var videoSource = "";
     if (localStream) {
-      videoSource = window.URL ? window.URL.createObjectURL(localStream)
-                               : localStream;
+      const videoSource = window.URL ? window.URL.createObjectURL(localStream)
+                                     : localStream;
+      return (
+       <Video
+         className={ Styles.localVideo }
+         src={ videoSource }
+         muted
+       />
+      );
     }
 
     return (
-      <Video
-        className={ Styles.localVideo }
-        src={ videoSource }
-        muted
-      />
+      <div className={ Styles.localVideoPlaceholder } />
     );
   }
 
   pageContent() {
-    const { connecting, room, remoteStreams } = this.props;
+    const { connecting, room, members, remoteStreams } = this.props;
 
     if (connecting) {
       return <Progress />;
     }
     else {
       if (room) {
-        return <VideoGroup videoSources={ remoteStreams } />
+        return <VideoGroup members={ members } remoteStreams={ remoteStreams } />
       }
       else {
         return <Banner text={ 'ROOM CONNECTION ERROR' } />;

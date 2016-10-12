@@ -25,3 +25,17 @@
   left: 10px;
   position: fixed;
 }
+
+.localVideoPlaceholder {
+  display: inline-block;
+  width: 200px;
+  height: auto;
+  margin: 0px;
+  padding: 0px;
+  top: auto;
+  right: auto;
+  bottom: 10px;
+  left: 10px;
+  position: fixed;
+  background-color: green;
+}

@@ -1,11 +1,7 @@
-
-var streamConstraints = {
-  audio: true,
-  video: true,
-};
+import config from 'config';
 
 const getLocalStream = () => {
-  return navigator.mediaDevices.getUserMedia(streamConstraints);
+  return navigator.mediaDevices.getUserMedia(config.mediaConstraints);
 };
 
 const closeLocalStream = (stream) => {

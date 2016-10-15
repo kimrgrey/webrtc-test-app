@@ -1,6 +1,24 @@
 {
   "apiUrl": "http://localhost:3000",
   "wsUrl": "http://localhost:3000",
+  "mediaConstraints": {
+    "audio": true,
+    "video": {
+      "width": {
+        "ideal": 1280,
+        "max": 1920
+      },
+      "height": {
+        "ideal": 720,
+        "max": 1080
+      },
+      "facingMode": "user",
+      "frameRate": {
+        "ideal": 24,
+        "max": 30
+      }
+    }
+  },
   "peerConnectionConfig": {
     "iceServers": [
       {

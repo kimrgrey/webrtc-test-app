@@ -1,4 +1,13 @@
+# build files
+
 node_modules/
 build/
+
+# temp and log giles
+
 tmp/
 *.log
+
+# configuration files
+
+app.config.json

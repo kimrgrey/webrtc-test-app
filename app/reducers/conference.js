@@ -71,14 +71,14 @@ const sendMessage = (state, action) => {
   const { sender, text } = action.payload;
   const { messages } = state;
 
-  return { ...state, messages: [ ...messages, { sender, text } ] };
+  return { ...state, messages: [ { sender, text }, ...messages ] };
 };
 
 const receiveMessage = (state, action) => {
   const { sender, text } = action.payload;
   const { messages } = state;
 
-  return { ...state, messages: [ ...messages, { sender, text } ] };
+  return { ...state, messages: [ { sender, text }, ...messages ] };
 };
 
 export default composeReducer('conference', {

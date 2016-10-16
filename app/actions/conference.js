@@ -21,6 +21,9 @@ const TYPES = createTypes('conference', [
   'processWebRTC',
 
   'handleRemoteStream',
+
+  'sendMessage',
+  'receiveMessage',
 ]);
 
 export const joinRoom = (id) => {
@@ -90,4 +93,18 @@ export const processWebRTC = (message) => {
     dispatch({ type: TYPES.processWebRTC });
     peersStore.handleWebRTCMessage(message);
   };
+};
+
+export const sendMessage = (sender, text) => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.sendMessage, payload: { sender, text } });
+    websocket().emit('message', JSON.stringify({
+      sender,
+      text,
+    }));
+  };
+};
+
+export const receiveMessage = (message) => {
+  return { type: TYPES.receiveMessage, payload: JSON.parse(message) };
 };

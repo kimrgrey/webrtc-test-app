@@ -39,3 +39,15 @@
   position: fixed;
   background-color: green;
 }
+
+.chatbox {
+  width: 400px;
+  height: 150px;
+  margin: auto;
+  left: 50%;
+  margin-left: -200px;
+  bottom: 0px;
+  position: fixed;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+}

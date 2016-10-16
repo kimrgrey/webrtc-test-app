@@ -4,6 +4,7 @@ import {
   connectPeer,
   disconnectPeer,
   processWebRTC,
+  receiveMessage,
 } from 'actions/conference';
 
 const configureWebsocket = (websocket, dispatch) => {
@@ -12,6 +13,7 @@ const configureWebsocket = (websocket, dispatch) => {
   websocket.on('joined',     (message) => dispatch(connectPeer(message)));
   websocket.on('left',       (message) => dispatch(disconnectPeer(message)));
   websocket.on('webrtc',     (message) => dispatch(processWebRTC(message)));
+  websocket.on('message',    (message) => dispatch(receiveMessage(message)));
 };
 
 export default configureWebsocket;

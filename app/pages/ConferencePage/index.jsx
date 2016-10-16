@@ -8,6 +8,7 @@ import CommunicationCallEnd from 'material-ui/svg-icons/communication/call-end';
 import { red500 } from 'material-ui/styles/colors';
 
 import Banner from 'components/Banner';
+import Chat from 'components/Chat';
 import Progress from 'components/Progress';
 import Video from 'components/Video';
 import VideoGroup from 'components/VideoGroup';
@@ -16,6 +17,7 @@ import {
   joinRoom,
   leaveRoom,
   leaveRoomWithRedirect,
+  sendMessage,
 } from 'actions/conference';
 
 import Styles from './Styles.css';
@@ -28,13 +30,18 @@ class ConferencePage extends Component {
   }
 
   componentWillUnmount() {
-    const { room, localStream } = this.props;
+    const { room, localStream } = this.props.conference;
 
     room && this.props.leaveRoom(room.id, localStream);
   }
 
+  sendMessage = (text) => {
+    const { id } = this.props.application;
+    this.props.sendMessage(id, text);
+  };
+
   leaveRoomButton() {
-    const { room } = this.props;
+    const { room } = this.props.conference;
 
     return (
       <FloatingActionButton
@@ -48,7 +55,7 @@ class ConferencePage extends Component {
   }
 
   localVideo() {
-    const { localStream } = this.props;
+    const { localStream } = this.props.conference;
 
     if (localStream) {
       const videoSource = window.URL ? window.URL.createObjectURL(localStream)
@@ -67,8 +74,18 @@ class ConferencePage extends Component {
     );
   }
 
+  chatBox() {
+    const { messages } = this.props.conference;
+
+    return (
+      <div className={ Styles.chatbox }>
+        <Chat messages={ messages } onSubmit={ this.sendMessage } />
+      </div>
+    );
+  }
+
   pageContent() {
-    const { connecting, room, members, remoteStreams } = this.props;
+    const { connecting, room, members, remoteStreams } = this.props.conference;
 
     if (connecting) {
       return <Progress />;
@@ -88,19 +105,24 @@ class ConferencePage extends Component {
       <div className={ Styles.container }>
         { this.pageContent() }
         { this.localVideo() }
+        { this.chatBox() }
         { this.leaveRoomButton() }
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => state.conference;
+const mapStateToProps = (state) => {
+  const { application, conference } = state;
+  return { application, conference };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     joinRoom,
     leaveRoom,
     leaveRoomWithRedirect,
+    sendMessage,
   }, dispatch);
 };
 

@@ -7,6 +7,7 @@ const initialState = {
   localStream: null,
   members: {},
   remoteStreams: {},
+  messages: [],
 };
 
 const storeMembers = (state, action) => {
@@ -39,6 +40,7 @@ const leaveRoom = (state, action) => {
     room: null,
     members: {},
     remoteStreams: {},
+    messages: [],
   };
 };
 
@@ -62,9 +64,21 @@ const handleRemoteStream = (state, action) => {
   const { id, stream } = action.payload;
   const { remoteStreams } = state;
 
-  remoteStreams[id] = stream;
-
   return { ...state, remoteStreams: { ...remoteStreams, [id] : stream } };
+};
+
+const sendMessage = (state, action) => {
+  const { sender, text } = action.payload;
+  const { messages } = state;
+
+  return { ...state, messages: [ ...messages, { sender, text } ] };
+};
+
+const receiveMessage = (state, action) => {
+  const { sender, text } = action.payload;
+  const { messages } = state;
+
+  return { ...state, messages: [ ...messages, { sender, text } ] };
 };
 
 export default composeReducer('conference', {
@@ -80,4 +94,7 @@ export default composeReducer('conference', {
   disconnectPeer,
 
   handleRemoteStream,
+
+  sendMessage,
+  receiveMessage,
 }, initialState);

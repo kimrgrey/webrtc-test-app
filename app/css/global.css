@@ -330,3 +330,22 @@ body,
 .dialog-window-button:disabled {
   cursor: default;
 }
+
+.nomatch-container {
+  padding: 50px;
+}
+
+.nomatch-container > h1 {
+  opacity: 0.5;
+  font-size: 48px;
+}
+
+.nomatch-container > h2 {
+  opacity: 0.4;
+  font-size: 32px;
+}
+
+.nomatch-container > h3 {
+  opacity: 0.3;
+  font-size: 24px;
+}

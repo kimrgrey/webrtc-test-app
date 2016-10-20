@@ -31,9 +31,15 @@ export const createRoomSubmit = (state, action) => {
 };
 
 export const createRoomSuccess = (state, action) => {
+  const newRoom = action.payload;
+
   const { rooms } = state;
-  rooms.push(action.payload);
-  return { ...state, rooms, creatingRoom: false };
+
+  return {
+    ...state,
+    rooms: [ ...rooms, newRoom ],
+    creatingRoom: false
+  };
 };
 
 export const createRoomFailure = (state, action) => {

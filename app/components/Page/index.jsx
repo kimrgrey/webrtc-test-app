@@ -1,10 +1,7 @@
-import React from 'react';
-import Styles from './Styles.css';
+import Page from './Page';
+import Content from './Content';
 
-const Page = ({ children }) => (
-  <div className={ Styles.page }>
-    { children }
-  </div>
-);
-
-export default Page;
+export {
+  Page,
+  Content,
+};

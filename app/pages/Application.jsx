@@ -1,36 +1,21 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { green500, green700 } from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
-import Page from 'components/Page';
-import Progress from 'components/Progress';
+import { Page } from 'components/Page';
+import Loader from 'components/Loader';
 
 
 class Application extends Component {
-  theme() {
-    return getMuiTheme({
-      palette: {
-        primary1Color: green500,
-        primary2Color: green700,
-      },
-    });
-  }
-
   render() {
     const { id, children } = this.props;
 
-    const pageContent = id ? children : <Progress />;
+    const content = id ? children : undefined;
 
     return (
-      <MuiThemeProvider muiTheme={ this.theme() }>
-        <Page>
-          { pageContent }
-        </Page>
-      </MuiThemeProvider>
+      <Page>
+        <Loader enabled={ id === null } />
+        { content }
+      </Page>
     );
   }
 }

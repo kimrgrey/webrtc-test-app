@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { map } from 'lodash';
 
 import {
   fetchRooms,
@@ -12,58 +10,42 @@ import {
   createRoomCancel
 } from 'actions/rooms';
 
-import Banner from 'components/Banner';
-import Progress from 'components/Progress';
-import RoomsGrid from 'components/RoomsGrid';
-import RoomDialog from 'components/RoomDialog';
-
-import Styles from './Styles.css';
+import { Content } from 'components/Page';
+import Loader from 'components/Loader';
+import { RoomGridContainer, RoomGrid, RoomGridCard } from 'components/RoomGrid';
+import { AddRoomButton } from 'components/ActionButton';
+import { AddRoomDialog } from 'components/Dialog';
 
 class RoomsPage extends Component {
   componentDidMount() {
     this.props.fetchRooms();
   }
 
-  roomsView () {
-    const { rooms } = this.props;
-
-    return rooms.length ? <RoomsGrid rooms={ rooms } /> : <Banner text={ 'NO ROOMS' }/>;
-  }
-
-  roomDialog() {
-    return (
-      <RoomDialog
-        open={ this.props.creatingRoom }
-        onSubmit={ this.props.createRoomSubmit }
-        onCancel={ this.props.createRoomCancel }
-      />
-    );
-  }
-
-  pageContent() {
-    const { loading, rooms } = this.props;
-
-    return loading ? <Progress /> : this.roomsView();
-  }
-
-  addRoomButton() {
-    return (
-      <FloatingActionButton
-        className={ Styles.action_button }
-        onTouchTap={ this.props.createRoom }
-      >
-        <ContentAdd />
-      </FloatingActionButton>
-    );
-  }
-
   render() {
+    const { loading, rooms, creatingRoom } = this.props;
+
     return (
-      <div className={ Styles.container }>
-        { this.pageContent() }
-        { this.addRoomButton() }
-        { this.roomDialog() }
-      </div>
+      <Content>
+        <Loader enabled={ loading } />
+
+        <AddRoomDialog
+          opened={ creatingRoom }
+          handleSubmit={ this.props.createRoomSubmit }
+          handleCancel={ this.props.createRoomCancel }
+        />
+
+        <RoomGridContainer>
+          <RoomGrid>
+            {
+              map(rooms, room => (
+                <RoomGridCard key={ room.id } { ...room } />
+              ))
+            }
+          </RoomGrid>
+        </RoomGridContainer>
+
+        <AddRoomButton handleClick={ this.props.createRoom } />
+      </Content>
     );
   }
 }

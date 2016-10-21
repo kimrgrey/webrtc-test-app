@@ -23,7 +23,7 @@ const leaveRoom = (state, action) => {
   return { ...state, description: {} };
 };
 
-export default composeReducer('room', {
+export default composeReducer('conference', {
   joinRoom,
   joinRoomSuccess,
   joinRoomFailure,

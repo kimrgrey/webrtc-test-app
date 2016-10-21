@@ -80,7 +80,9 @@ export const removeMember = (message) => {
   const client = JSON.parse(message);
 
   return (dispatch) => {
+    dispatch({ type: TYPES.removeRemoteStream, payload: { id: client.id } });
     dispatch({ type: TYPES.removeMember, payload: client });
+
     peersStore.handleClientLeft(message);
   };
 };

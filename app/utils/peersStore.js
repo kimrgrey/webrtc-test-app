@@ -1,7 +1,7 @@
 import config from 'config';
 import websocket from 'utils/websocket';
 
-import { addRemoteStream, removeRemoteStream } from 'actions/conference';
+import { addRemoteStream } from 'actions/conference';
 
 const sdpConstraints = {
   mandatory: {
@@ -72,7 +72,7 @@ const createConnection = (remoteId) => {
     pc.ontrack = (event) => {
       const stream = event.streams[0];
       peersStore.remoteStreams[remoteId] = stream;
-      peersStore.dispatch(addRemoteStream({ id: remoteId, stream  }));
+      peersStore.dispatch(addRemoteStream({ id: remoteId, stream }));
     };
   }
   else {
@@ -91,7 +91,6 @@ const destroyConnection = (remoteId) => {
   const remoteStream = peersStore.remoteStreams[remoteId];
 
   if (remoteStream) {
-    peersStore.dispatch(removeRemoteStream({ id: remoteId }));
     remoteStream.getTracks().forEach((track) => track.stop());
   }
 

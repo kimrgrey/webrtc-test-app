@@ -20,14 +20,14 @@ const leaveRoom = (state, action) => {
 };
 
 const addRemoteStream = (state, action) => {
-  const { id, stream } = action.payload;
+  const stream = action.payload;
   const { remoteStreams } = state;
 
   return {
     ...state,
     remoteStreams: {
       ...remoteStreams,
-      [id] : stream,
+      [stream.id] : stream,
     }
   };
 };
@@ -36,7 +36,7 @@ const removeRemoteStream = (state, action) => {
   const { id } = action.payload;
   const { remoteStreams } = state;
 
-  delete remoteStream[id];
+  delete remoteStreams[id];
 
   return {
     ...state,
@@ -46,7 +46,7 @@ const removeRemoteStream = (state, action) => {
   };
 };
 
-export default composeReducer('streams', {
+export default composeReducer('conference', {
   joinRoomSuccess,
   leaveRoom,
   addRemoteStream,

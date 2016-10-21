@@ -26,7 +26,7 @@ const removeMember = (state, action) => {
   return { ...members };
 };
 
-export default composeReducer('members', {
+export default composeReducer('conference', {
   storeMembers,
   leaveRoom,
   addMember,

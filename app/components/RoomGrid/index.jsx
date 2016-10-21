@@ -1,9 +1,9 @@
-import RoomGridContainer from './RoomGridContainer';
 import RoomGrid          from './RoomGrid';
 import RoomGridCard      from './RoomGridCard';
+import RoomGridContainer from './RoomGridContainer';
 
 export {
-  RoomGridContainer,
   RoomGrid,
   RoomGridCard,
+  RoomGridContainer,
 };

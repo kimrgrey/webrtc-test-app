@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { values } from 'lodash';
 
 import {
   joinRoom,
@@ -9,11 +10,47 @@ import {
   sendMessage,
 } from 'actions/conference';
 
+import { Content } from 'components/Page';
+import Loader from 'components/Loader';
+import { Chat } from 'components/Chat';
+import { LeaveRoomButton } from 'components/ActionButton';
+import { VideoGrid, VideoGridContainer } from 'components/VideoGrid';
+
+
 class ConferencePage extends Component {
+  componentDidMount() {
+    const { roomId } = this.props.params;
+    this.props.joinRoom(roomId);
+  }
+
+  componentWillUnmount() {
+    const { room, streams } = this.props.conference;
+    const { description } = room;
+    const { localStream } = streams;
+
+    description.id && this.props.leaveRoom(description.id, localStream);
+  }
+
+  sendMessage = (text) => {
+    const { id } = this.props.application;
+    this.props.sendMessage(id, text);
+  };
+
   render() {
+    const { messages, room, streams } = this.props.conference;
+    const { loading } = room;
+    
+    const remoteStreams = values(streams.remoteStreams);
+
     return (
-      <div>
-      </div>
+      <Content>
+        <Loader enabled={ loading } />
+        <Chat messages={ messages } handleMessageSubmit={ this.sendMessage } />
+        <VideoGridContainer>
+          <VideoGrid streams={ remoteStreams } />
+        </VideoGridContainer>
+        <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
+      </Content>
     );
   }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { map } from 'lodash';
 
 import {
   fetchRooms,
@@ -12,7 +11,7 @@ import {
 
 import { Content } from 'components/Page';
 import Loader from 'components/Loader';
-import { RoomGridContainer, RoomGrid, RoomGridCard } from 'components/RoomGrid';
+import { RoomGridContainer, RoomGrid } from 'components/RoomGrid';
 import { AddRoomButton } from 'components/ActionButton';
 import { AddRoomDialog } from 'components/Dialog';
 
@@ -35,13 +34,7 @@ class RoomsPage extends Component {
         />
 
         <RoomGridContainer>
-          <RoomGrid>
-            {
-              map(rooms, room => (
-                <RoomGridCard key={ room.id } { ...room } />
-              ))
-            }
-          </RoomGrid>
+          <RoomGrid rooms={ rooms } />
         </RoomGridContainer>
 
         <AddRoomButton handleClick={ this.props.createRoom } />

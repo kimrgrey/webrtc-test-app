@@ -36,7 +36,7 @@ const receiveMessage = (state, action) => {
   return [ ...state, newMessage ];
 };
 
-export default composeReducer('messages', {
+export default composeReducer('conference', {
   leaveRoom,
   addMember,
   removeMember,

@@ -10,10 +10,11 @@ import {
   sendMessage,
 } from 'actions/conference';
 
-import { Content } from 'components/Page';
-import Loader from 'components/Loader';
-import Chat from 'components/Chat';
-import VideoGrid from 'components/VideoGrid';
+import { Content }         from 'components/Page';
+import   Loader            from 'components/Loader';
+import   ErrorBanner       from 'components/ErrorBanner';
+import   Chat              from 'components/Chat';
+import   VideoGrid         from 'components/VideoGrid';
 import { LeaveRoomButton } from 'components/ActionButton';
 
 
@@ -38,12 +39,13 @@ class ConferencePage extends Component {
 
   render() {
     const { messages, room, streams } = this.props.conference;
-    const { loading } = room;
+    const { error, loading } = room;
 
     const remoteStreams = values(streams.remoteStreams);
 
     return (
       <Content>
+        <ErrorBanner enabled={ error } text={ 'Room Connection Error' } />
         <Loader enabled={ loading } />
         <Chat messages={ messages } handleMessageSubmit={ this.sendMessage } />
         <VideoGrid streams={ remoteStreams } />

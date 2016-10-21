@@ -375,3 +375,24 @@ body,
   opacity: 0.3;
   font-size: 24px;
 }
+
+.error-banner {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: white;
+  z-index: 1;
+  display: none;
+  padding: 50px;
+}
+
+.error-banner.enabled {
+  display: block;
+}
+
+.error-banner > h1 {
+  opacity: 0.5;
+  font-size: 32px;
+}

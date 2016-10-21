@@ -9,11 +9,13 @@ import {
   createRoomCancel
 } from 'actions/rooms';
 
-import { Content } from 'components/Page';
-import Loader from 'components/Loader';
-import RoomGrid from 'components/RoomGrid';
+import { Content }       from 'components/Page';
+import   Loader          from 'components/Loader';
+import   ErrorBanner     from 'components/ErrorBanner';
+import   RoomGrid        from 'components/RoomGrid';
 import { AddRoomButton } from 'components/ActionButton';
 import { AddRoomDialog } from 'components/Dialog';
+
 
 class RoomsPage extends Component {
   componentDidMount() {
@@ -21,10 +23,11 @@ class RoomsPage extends Component {
   }
 
   render() {
-    const { loading, rooms, creatingRoom } = this.props;
+    const { error, loading, rooms, creatingRoom } = this.props;
 
     return (
       <Content>
+        <ErrorBanner enabled={ error } text={ 'Room List Loading Error' } />
         <Loader enabled={ loading } />
 
         <AddRoomDialog

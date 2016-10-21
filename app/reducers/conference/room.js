@@ -2,21 +2,22 @@ import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {
   loading: false,
+  error: false,
   description: {},
 };
 
 const joinRoom = (state, action) => {
-  return { ...state, loading: true };
+  return { ...state, loading: true, error: false };
 };
 
 const joinRoomSuccess = (state, action) => {
   const { room } = action.payload;
 
-  return { ...state, loading: false, description: room };
+  return { ...state, loading: false, error: false, description: room };
 };
 
 const joinRoomFailure = (state, action) => {
-  return { ...state, loading: false };
+  return { ...state, loading: false, error: true };
 };
 
 const leaveRoom = (state, action) => {

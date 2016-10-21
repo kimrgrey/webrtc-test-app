@@ -16,11 +16,12 @@ const TYPES = createTypes('conference', [
 
   'storeMembers',
 
-  'connectPeer',
-  'disconnectPeer',
+  'addMember',
+  'removeMember',
   'processWebRTC',
 
-  'handleRemoteStream',
+  'addRemoteStream',
+  'removeRemoteStream',
 
   'sendMessage',
   'receiveMessage',
@@ -40,9 +41,13 @@ export const joinRoom = (id) => {
         payload.localStream = stream;
         peersStore.setLocalStream(stream);
       })
-      .then(()         => { websocket().emit('join', JSON.stringify({ id })) })
+      .then(()         => websocket().emit('join', JSON.stringify({ id })))
       .then(()         => dispatch({ type: TYPES.joinRoomSuccess, payload }))
-      .catch(()        => dispatch({ type: TYPES.joinRoomFailure }));
+      .catch(()        => {
+        localStream.closeLocalStream(payload.localStream);
+        peersStore.cleanup();
+        dispatch({ type: TYPES.joinRoomFailure })
+      });
   };
 };
 
@@ -66,26 +71,32 @@ export const storeMembers = (message) => {
   return { type: TYPES.storeMembers, payload: JSON.parse(message) };
 };
 
-export const connectPeer = (message) => {
+export const addMember = (message) => {
   const client = JSON.parse(message);
 
   return (dispatch) => {
-    dispatch({ type: TYPES.connectPeer, payload: client });
+    dispatch({ type: TYPES.addMember, payload: client });
     peersStore.handleClientJoined(message);
   };
 };
 
-export const disconnectPeer = (message) => {
+export const removeMember = (message) => {
   const client = JSON.parse(message);
 
   return (dispatch) => {
-    dispatch({ type: TYPES.disconnectPeer, payload: client });
+    dispatch({ type: TYPES.removeRemoteStream, payload: { id: client.id } });
+    dispatch({ type: TYPES.removeMember, payload: client });
+
     peersStore.handleClientLeft(message);
   };
 };
 
-export const handleRemoteStream = (client) => {
-  return { type: TYPES.handleRemoteStream, payload: client };
+export const addRemoteStream = (remoteStream) => {
+  return { type: TYPES.addRemoteStream, payload: remoteStream };
+};
+
+export const removeRemoteStream = (remoteStream) => {
+  return { type: TYPES.removeRemoteStream, payload: remoteStream };
 };
 
 export const processWebRTC = (message) => {
@@ -96,8 +107,10 @@ export const processWebRTC = (message) => {
 };
 
 export const sendMessage = (sender, text) => {
+  const type = 'outcoming';
+
   return (dispatch) => {
-    dispatch({ type: TYPES.sendMessage, payload: { sender, text } });
+    dispatch({ type: TYPES.sendMessage, payload: { sender, text, type } });
     websocket().emit('message', JSON.stringify({
       sender,
       text,
@@ -106,5 +119,8 @@ export const sendMessage = (sender, text) => {
 };
 
 export const receiveMessage = (message) => {
-  return { type: TYPES.receiveMessage, payload: JSON.parse(message) };
+  const { sender, text } = JSON.parse(message);
+  const type = 'incoming';
+
+  return { type: TYPES.receiveMessage, payload: { sender, text, type } };
 };

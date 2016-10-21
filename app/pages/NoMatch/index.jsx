@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import Banner from 'components/Banner';
-import Styles from './Styles.css';
+import classNames from 'classnames';
 
 
 class NoMatch extends Component {
   render() {
     return (
-      <div className={ Styles.container }>
-        <Banner text={ 'SUCH ERROR, SO NOT FOUND' } />
+      <div className={ classNames('nomatch-container') }>
+        <h1>Such Error...</h1>
+        <h2>So Not Found...</h2>
+        <h3>Wow...</h3>
       </div>
     );
   }

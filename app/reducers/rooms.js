@@ -2,20 +2,21 @@ import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {
   loading: false,
+  error: false,
   rooms: [],
   creatingRoom: false,
 };
 
 export const fetchRooms = (state, action) => {
-  return { ...state, loading: true, rooms: [] };
+  return { ...state, loading: true, error: false, rooms: [] };
 };
 
 export const fetchRoomsSuccess = (state, action) => {
-  return { ...state, loading: false, rooms: action.payload };
+  return { ...state, loading: false, error: false, rooms: action.payload };
 };
 
 export const fetchRoomsFailure = (state, action) => {
-  return { ...state, loading: false, rooms: [] };
+  return { ...state, loading: false, error: true, rooms: [] };
 };
 
 export const createRoom = (state, action) => {
@@ -31,9 +32,15 @@ export const createRoomSubmit = (state, action) => {
 };
 
 export const createRoomSuccess = (state, action) => {
+  const newRoom = action.payload;
+
   const { rooms } = state;
-  rooms.push(action.payload);
-  return { ...state, rooms, creatingRoom: false };
+
+  return {
+    ...state,
+    rooms: [ ...rooms, newRoom ],
+    creatingRoom: false
+  };
 };
 
 export const createRoomFailure = (state, action) => {

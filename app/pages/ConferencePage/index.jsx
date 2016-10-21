@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import CommunicationCallEnd from 'material-ui/svg-icons/communication/call-end';
-import { red500 } from 'material-ui/styles/colors';
-
-import Banner from 'components/Banner';
-import Chat from 'components/Chat';
-import Progress from 'components/Progress';
-import Video from 'components/Video';
-import VideoGroup from 'components/VideoGroup';
+import { values } from 'lodash';
 
 import {
   joinRoom,
@@ -20,7 +10,12 @@ import {
   sendMessage,
 } from 'actions/conference';
 
-import Styles from './Styles.css';
+import { Content }         from 'components/Page';
+import   Loader            from 'components/Loader';
+import   ErrorBanner       from 'components/ErrorBanner';
+import   Chat              from 'components/Chat';
+import   VideoGrid         from 'components/VideoGrid';
+import { LeaveRoomButton } from 'components/ActionButton';
 
 
 class ConferencePage extends Component {
@@ -30,9 +25,11 @@ class ConferencePage extends Component {
   }
 
   componentWillUnmount() {
-    const { room, localStream } = this.props.conference;
+    const { room, streams } = this.props.conference;
+    const { description } = room;
+    const { localStream } = streams;
 
-    room && this.props.leaveRoom(room.id, localStream);
+    description.id && this.props.leaveRoom(description.id, localStream);
   }
 
   sendMessage = (text) => {
@@ -40,74 +37,20 @@ class ConferencePage extends Component {
     this.props.sendMessage(id, text);
   };
 
-  leaveRoomButton() {
-    const { room } = this.props.conference;
-
-    return (
-      <FloatingActionButton
-        backgroundColor={ red500 }
-        className={ Styles.action_button }
-        onTouchTap={ this.props.leaveRoomWithRedirect }
-      >
-        <CommunicationCallEnd />
-      </FloatingActionButton>
-    );
-  }
-
-  localVideo() {
-    const { localStream } = this.props.conference;
-
-    if (localStream) {
-      const videoSource = window.URL ? window.URL.createObjectURL(localStream)
-                                     : localStream;
-      return (
-       <Video
-         className={ Styles.localVideo }
-         src={ videoSource }
-         muted
-       />
-      );
-    }
-
-    return (
-      <div className={ Styles.localVideoPlaceholder } />
-    );
-  }
-
-  chatBox() {
-    const { messages } = this.props.conference;
-
-    return (
-      <div className={ Styles.chatbox }>
-        <Chat messages={ messages } onSubmit={ this.sendMessage } />
-      </div>
-    );
-  }
-
-  pageContent() {
-    const { connecting, room, members, remoteStreams } = this.props.conference;
-
-    if (connecting) {
-      return <Progress />;
-    }
-    else {
-      if (room) {
-        return <VideoGroup members={ members } remoteStreams={ remoteStreams } />
-      }
-      else {
-        return <Banner text={ 'ROOM CONNECTION ERROR' } />;
-      }
-    }
-  }
-
   render() {
+    const { messages, room, streams } = this.props.conference;
+    const { error, loading } = room;
+
+    const remoteStreams = values(streams.remoteStreams);
+
     return (
-      <div className={ Styles.container }>
-        { this.pageContent() }
-        { this.localVideo() }
-        { this.chatBox() }
-        { this.leaveRoomButton() }
-      </div>
+      <Content>
+        <ErrorBanner enabled={ error } text={ 'Room Connection Error' } />
+        <Loader enabled={ loading } />
+        <Chat messages={ messages } handleMessageSubmit={ this.sendMessage } />
+        <VideoGrid streams={ remoteStreams } />
+        <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
+      </Content>
     );
   }
 }

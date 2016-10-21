@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 import application from './application';
-import conference from './conference';
+import conference from './conference/';
 import rooms from './rooms';
 
 

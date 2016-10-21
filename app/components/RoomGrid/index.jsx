@@ -1,9 +1,3 @@
-import RoomGrid          from './RoomGrid';
-import RoomGridCard      from './RoomGridCard';
-import RoomGridContainer from './RoomGridContainer';
+import RoomGrid from './RoomGrid';
 
-export {
-  RoomGrid,
-  RoomGridCard,
-  RoomGridContainer,
-};
+export default RoomGrid

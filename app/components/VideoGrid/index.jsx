@@ -1,9 +1,3 @@
-import VideoGrid          from './VideoGrid';
-import VideoGridCard      from './VideoGridCard';
-import VideoGridContainer from './VideoGridContainer';
+import VideoGrid from './VideoGrid';
 
-export {
-  VideoGrid,
-  VideoGridCard,
-  VideoGridContainer,
-};
+export default VideoGrid;

@@ -12,9 +12,9 @@ import {
 
 import { Content } from 'components/Page';
 import Loader from 'components/Loader';
-import { Chat } from 'components/Chat';
+import Chat from 'components/Chat';
+import VideoGrid from 'components/VideoGrid';
 import { LeaveRoomButton } from 'components/ActionButton';
-import { VideoGrid, VideoGridContainer } from 'components/VideoGrid';
 
 
 class ConferencePage extends Component {
@@ -39,16 +39,14 @@ class ConferencePage extends Component {
   render() {
     const { messages, room, streams } = this.props.conference;
     const { loading } = room;
-    
+
     const remoteStreams = values(streams.remoteStreams);
 
     return (
       <Content>
         <Loader enabled={ loading } />
         <Chat messages={ messages } handleMessageSubmit={ this.sendMessage } />
-        <VideoGridContainer>
-          <VideoGrid streams={ remoteStreams } />
-        </VideoGridContainer>
+        <VideoGrid streams={ remoteStreams } />
         <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
       </Content>
     );

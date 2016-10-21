@@ -11,7 +11,7 @@ import {
 
 import { Content } from 'components/Page';
 import Loader from 'components/Loader';
-import { RoomGridContainer, RoomGrid } from 'components/RoomGrid';
+import RoomGrid from 'components/RoomGrid';
 import { AddRoomButton } from 'components/ActionButton';
 import { AddRoomDialog } from 'components/Dialog';
 
@@ -33,9 +33,7 @@ class RoomsPage extends Component {
           handleCancel={ this.props.createRoomCancel }
         />
 
-        <RoomGridContainer>
-          <RoomGrid rooms={ rooms } />
-        </RoomGridContainer>
+        <RoomGrid rooms={ rooms } />
 
         <AddRoomButton handleClick={ this.props.createRoom } />
       </Content>

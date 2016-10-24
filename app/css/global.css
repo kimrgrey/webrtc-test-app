@@ -157,6 +157,7 @@ body,
   padding: 0px;
   margin: 5px;
   border-radius: 3px;
+  line-height: 0px;
 }
 
 .video-grid-card-video {

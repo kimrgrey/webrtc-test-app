@@ -20,7 +20,9 @@ class ChatMessageInput extends Component {
 
     const { message } = this.state;
 
-    this.props.handleMessageSubmit(message);
+    if (message.trim().length) {
+      this.props.handleMessageSubmit(message);
+    }
 
     this.setState({ message: '' });
   };

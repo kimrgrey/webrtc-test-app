@@ -12,9 +12,12 @@ import {
 import { Content }       from 'components/Page';
 import   Loader          from 'components/Loader';
 import   ErrorBanner     from 'components/ErrorBanner';
+import   ContentPlaceholder from 'components/ContentPlaceholder';
 import   RoomGrid        from 'components/RoomGrid';
 import { AddRoomButton } from 'components/ActionButton';
 import { AddRoomDialog } from 'components/Dialog';
+
+import roomGridEmpty from '../../images/room-grid-empty.svg';
 
 
 class RoomsPage extends Component {
@@ -40,7 +43,12 @@ class RoomsPage extends Component {
             handleCancel={ this.props.createRoomCancel }
           />
         }
-        <RoomGrid rooms={ rooms } />
+        { rooms.length === 0 &&
+          <ContentPlaceholder icon={ roomGridEmpty } text={ 'No Rooms' } />
+        }
+        { rooms.length > 0 &&
+          <RoomGrid rooms={ rooms } />
+        }
         <AddRoomButton handleClick={ this.props.createRoom } />
       </Content>
     );

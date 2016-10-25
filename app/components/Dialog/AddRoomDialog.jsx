@@ -68,6 +68,7 @@ class AddRoomDialog extends Component {
         <input
           className={ classNames('dialog-window-input', { invalid, valid }) }
           id="room-name-input"
+          autoFocus
           type="text"
           value={ name }
           onChange={ this.handleNameChange }

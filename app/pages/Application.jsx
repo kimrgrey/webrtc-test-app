@@ -13,7 +13,9 @@ class Application extends Component {
 
     return (
       <Page>
-        <Loader enabled={ id === null } />
+        { id === null &&
+          <Loader enabled />
+        }
         { content }
       </Page>
     );

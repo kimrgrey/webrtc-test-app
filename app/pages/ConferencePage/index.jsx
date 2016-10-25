@@ -45,8 +45,12 @@ class ConferencePage extends Component {
 
     return (
       <Content>
-        <ErrorBanner enabled={ error } text={ 'Room Connection Error' } />
-        <Loader enabled={ loading } />
+        { error &&
+          <ErrorBanner enabled text={ 'Room Connection Error' } />
+        }
+        { loading &&
+          <Loader enabled />
+        }
         <Chat messages={ messages } handleMessageSubmit={ this.sendMessage } />
         <VideoGrid streams={ remoteStreams } />
         <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />

@@ -27,17 +27,20 @@ class RoomsPage extends Component {
 
     return (
       <Content>
-        <ErrorBanner enabled={ error } text={ 'Room List Loading Error' } />
-        <Loader enabled={ loading } />
-
-        <AddRoomDialog
-          opened={ creatingRoom }
-          handleSubmit={ this.props.createRoomSubmit }
-          handleCancel={ this.props.createRoomCancel }
-        />
-
+        { error &&
+          <ErrorBanner enabled text={ 'Room List Loading Error' } />
+        }
+        { loading &&
+          <Loader enabled />
+        }
+        { creatingRoom &&
+          <AddRoomDialog
+            opened
+            handleSubmit={ this.props.createRoomSubmit }
+            handleCancel={ this.props.createRoomCancel }
+          />
+        }
         <RoomGrid rooms={ rooms } />
-
         <AddRoomButton handleClick={ this.props.createRoom } />
       </Content>
     );

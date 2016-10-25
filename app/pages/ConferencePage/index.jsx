@@ -15,7 +15,8 @@ import   Loader            from 'components/Loader';
 import   ErrorBanner       from 'components/ErrorBanner';
 import   ContentPlaceholder from 'components/ContentPlaceholder';
 import   Chat              from 'components/Chat';
-import   VideoGrid         from 'components/VideoGrid';
+import   LocalVideo        from 'components/LocalVideo';
+import { VideoGrid, VideoGridContainer } from 'components/VideoGrid';
 import { LeaveRoomButton } from 'components/ActionButton';
 
 import videoGridEmpty from '../../images/video-grid-empty.svg';
@@ -45,24 +46,38 @@ class ConferencePage extends Component {
     const { error, loading } = room;
 
     const members = values(this.props.conference.members);
+    const localStream = streams.localStream;
     const remoteStreams = values(streams.remoteStreams);
 
     return (
       <Content>
+
         { error &&
           <ErrorBanner enabled text={ 'Room Connection Error' } />
         }
+
         { loading &&
           <Loader enabled />
         }
+
         <Chat messages={ messages } handleMessageSubmit={ this.sendMessage } />
-        { members.length === 0 &&
-          <ContentPlaceholder icon={ videoGridEmpty } text={ 'No Members' } />
-        }
-        { members.length > 0 &&
-          <VideoGrid streams={ remoteStreams } />
-        }
-        <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
+
+        <VideoGridContainer>
+          { members.length === 0 &&
+            <ContentPlaceholder icon={ videoGridEmpty } text={ 'No Members' } />
+          }
+
+          { members.length > 0 &&
+            <VideoGrid streams={ remoteStreams } />
+          }
+
+          { localStream !== null &&
+            <LocalVideo stream={ localStream } />
+          }
+
+          <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
+        </VideoGridContainer>
+
       </Content>
     );
   }

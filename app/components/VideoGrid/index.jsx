@@ -1,3 +1,7 @@
 import VideoGrid from './VideoGrid';
+import VideoGridContainer from './VideoGridContainer';
 
-export default VideoGrid;
+export {
+  VideoGrid,
+  VideoGridContainer,
+};

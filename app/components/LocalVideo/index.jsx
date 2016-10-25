@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 
-class VideoGridCard extends Component {
+class LocalVideo extends Component {
   shouldComponentUpdate = (nextProps, nextState) => (
     this.props.stream !== nextProps.stream
   );
@@ -14,10 +14,11 @@ class VideoGridCard extends Component {
 
   render() {
     return (
-      <div className={ classNames('video-grid-card') }>
+      <div className={ classNames('local-video-card') }>
         <video
-          className={ classNames('video-grid-card-video') }
+          className={ classNames('local-video-card-video') }
           autoPlay
+          muted
           src={ this.videoSource(this.props.stream) }>
         </video>
       </div>
@@ -25,4 +26,4 @@ class VideoGridCard extends Component {
   }
 }
 
-export default VideoGridCard;
+export default LocalVideo;

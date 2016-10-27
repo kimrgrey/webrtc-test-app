@@ -14,7 +14,7 @@ class LocalVideo extends Component {
 
   render() {
     return (
-      <div className={ classNames('local-video-card') }>
+      <div className={ classNames('local-video-card', 'controls', 'bottom', 'left') }>
         <video
           className={ classNames('local-video-card-video') }
           autoPlay

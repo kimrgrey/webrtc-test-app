@@ -40,6 +40,7 @@ class ChatMessageInput extends Component {
             className={ classNames('chat-message-input') }
             type="text"
             autoFocus
+            placeholder={ 'enter message' }
             value={ message }
             onChange={ this.handleMessageChange }
           />

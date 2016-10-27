@@ -3,7 +3,11 @@ import ActionButton from './ActionButton';
 
 
 const AddRoomButton = ({ handleClick }) => (
-  <ActionButton type={ 'add-room' } icon={ 'add' } handleClick={ handleClick } />
+  <ActionButton
+    types={ [ 'add-room', 'controls', 'bottom', 'right' ] }
+    icon={ 'add' }
+    handleClick={ handleClick }
+    />
 );
 
 export default AddRoomButton;

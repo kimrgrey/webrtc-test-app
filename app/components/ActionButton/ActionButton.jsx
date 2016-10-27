@@ -2,8 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 
-const ActionButton = ({ type, icon, handleClick }) => (
-  <div className={ classNames('action-button', 'shadow', type) }>
+const ActionButton = ({ types, icon, handleClick }) => (
+  <div className={ classNames('action-button', 'shadow', ...types) }>
     <div
       className={ classNames('action-button', 'button') }
       onClick={ handleClick }

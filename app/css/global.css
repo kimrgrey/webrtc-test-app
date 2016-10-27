@@ -10,6 +10,7 @@ body,
 
 .content {
   height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -35,9 +36,10 @@ body,
 }
 
 .room-grid-container {
+  max-height: 100%;
   flex-grow: 1;
   overflow-y: auto;
-  padding: 20px;
+  position: relative;
 }
 
 .room-grid {
@@ -54,7 +56,7 @@ body,
   height: 250px;
   background-color: lightgray;
   position: relative;
-  margin: 5px;
+  margin: 20px;
   border-radius: 3px;
 }
 
@@ -124,24 +126,17 @@ body,
 
 .action-button.add-room {
     background-color: #4CAF50;
-    position: fixed;
-    bottom: 30px;
-    right: 50px;
 }
 
 .action-button.leave-room {
     background-color: #F44336;
-    position: fixed;
-    bottom: 30px;
-    right: 50px;
 }
-
 
 .video-grid-container {
   flex-grow: 1;
-  order: 2;
+  max-height: 100%;
+  order: 1;
   overflow-y: auto;
-  padding: 20px;
   background-color: #424242;
   position: relative;
 }
@@ -161,7 +156,7 @@ body,
 .video-grid-card {
   background-color: lightgray;
   padding: 0px;
-  margin: 5px;
+  margin: 20px;
   border-radius: 3px;
   line-height: 0px;
 }
@@ -175,7 +170,7 @@ body,
 
 .chat {
   flex-grow: 0;
-  order: 1;
+  order: 2;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -409,11 +404,9 @@ body,
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 
-/* Rules for using icons as black on a light background. */
 .material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
 .material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
 
-/* Rules for using icons as white on a dark background. */
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
@@ -443,12 +436,8 @@ body,
 .local-video-card {
   background-color: lightgray;
   padding: 0px;
-  margin: 5px;
   border-radius: 3px;
   line-height: 0px;
-  position: fixed;
-  bottom: 30px;
-  left: 384px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
 }
 
@@ -457,4 +446,31 @@ body,
   max-width: 200px;
   width: 100%;
   height: auto;
+}
+
+.controls {
+  position: absolute;
+}
+
+.controls.left {
+  left: 30px;
+}
+
+.controls.bottom {
+  bottom: 30px;
+}
+
+.controls.right {
+  right: 30px;
+}
+
+.controls.top {
+  top: 30px;
+}
+
+.controls.center {
+  left: 0px;
+  right: 0px;
+  margin-left: auto;
+  margin-right: auto;
 }

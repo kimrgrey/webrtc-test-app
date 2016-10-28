@@ -9,6 +9,14 @@
   align-content: center;
 }
 
+.content-placeholder.light {
+  background-color: #FFFFFF;
+}
+
+.content-placeholder.dark {
+  background-color: #424242;
+}
+
 .content-placeholder-icon {
   padding: 30px;
   width: 120px;

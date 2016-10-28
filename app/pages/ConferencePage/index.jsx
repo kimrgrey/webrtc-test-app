@@ -32,9 +32,8 @@ class ConferencePage extends Component {
   }
 
   componentWillUnmount() {
-    const { room, streams } = this.props.conference;
+    const { room, streams, localStream } = this.props.conference;
     const { description } = room;
-    const { localStream } = streams;
 
     description.id && this.props.leaveRoom(description.id, localStream);
   }
@@ -45,11 +44,10 @@ class ConferencePage extends Component {
   };
 
   render() {
-    const { messages, room, streams } = this.props.conference;
+    const { messages, room, streams, localStream } = this.props.conference;
     const { error, loading } = room;
 
     const members = values(this.props.conference.members);
-    const localStream = streams.localStream;
     const remoteStreams = values(streams.remoteStreams);
 
     return (
@@ -65,7 +63,11 @@ class ConferencePage extends Component {
         { !error &&
           <Workspace>
             { members.length === 0 &&
-              <ContentPlaceholder icon={ videoGridEmpty } text={ 'No Members' } />
+              <ContentPlaceholder
+                icon={ videoGridEmpty }
+                text={ 'No Members' }
+                dark
+              />
             }
 
             { members.length > 0 &&
@@ -73,7 +75,7 @@ class ConferencePage extends Component {
             }
 
             { localStream !== null &&
-              <LocalVideo stream={ localStream } />
+              <LocalVideo streamDescription={ localStream } />
             }
 
             <CallTimer />

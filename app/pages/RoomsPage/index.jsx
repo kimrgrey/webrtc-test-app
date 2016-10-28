@@ -42,7 +42,11 @@ class RoomsPage extends Component {
         { !error &&
           <Workspace>
             { rooms.length === 0 &&
-              <ContentPlaceholder icon={ roomGridEmpty } text={ 'No Rooms' } />
+              <ContentPlaceholder
+                icon={ roomGridEmpty }
+                text={ 'No Rooms' }
+                light
+              />
             }
 
             { rooms.length > 0 &&

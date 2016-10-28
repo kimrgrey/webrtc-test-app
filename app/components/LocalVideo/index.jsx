@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 class LocalVideo extends Component {
   shouldComponentUpdate = (nextProps, nextState) => (
-    this.props.stream !== nextProps.stream
+    this.props.streamDescription !== nextProps.streamDescription
   );
 
   videoSource = (stream) => {
@@ -13,14 +13,18 @@ class LocalVideo extends Component {
   };
 
   render() {
+    const { hasAudio, hasVideo, audioEnabled, videoEnabled, stream } = this.props.streamDescription;
+
     return (
       <div className={ classNames('local-stream-card', 'overlay', 'bottom', 'left') }>
-        <video
-          className={ classNames('local-stream-card-video') }
-          autoPlay
-          muted
-          src={ this.videoSource(this.props.stream) }>
-        </video>
+        { stream &&
+          <video
+            className={ classNames('local-stream-card-video') }
+            autoPlay
+            muted
+            src={ this.videoSource(stream) }>
+          </video>
+        }
       </div>
     );
   }

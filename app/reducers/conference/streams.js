@@ -1,20 +1,12 @@
 import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {
-  localStream: null,
   remoteStreams: {},
-};
-
-const joinRoomSuccess = (state, action) => {
-  const { localStream } = action.payload;
-
-  return { ...state, localStream };
 };
 
 const leaveRoom = (state, action) => {
   return {
     ...state,
-    localStream: null,
     remoteStreams: {},
   };
 };
@@ -47,7 +39,6 @@ const removeRemoteStream = (state, action) => {
 };
 
 export default composeReducer('conference', {
-  joinRoomSuccess,
   leaveRoom,
   addRemoteStream,
   removeRemoteStream,

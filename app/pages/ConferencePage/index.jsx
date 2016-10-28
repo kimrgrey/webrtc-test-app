@@ -15,6 +15,7 @@ import   ErrorBanner       from 'components/ErrorBanner';
 import   ContentPlaceholder from 'components/ContentPlaceholder';
 import   Chat              from 'components/Chat';
 import   LocalVideo        from 'components/LocalVideo';
+import   CallTimer         from 'components/CallTimer';
 import   Workspace         from 'components/Workspace';
 import   SideBar           from 'components/SideBar';
 import   Page              from 'components/Page';
@@ -75,6 +76,7 @@ class ConferencePage extends Component {
               <LocalVideo stream={ localStream } />
             }
 
+            <CallTimer />
             <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
           </Workspace>
         }

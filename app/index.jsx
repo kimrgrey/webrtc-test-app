@@ -17,6 +17,7 @@ import configureWebsocket from 'utils/configureWebsocket';
 import peersStore from 'utils/peersStore';
 
 import 'css/action_button.css'
+import 'css/call_timer.css';
 import 'css/chat.css'
 import 'css/content_placeholder.css'
 import 'css/dialog.css'

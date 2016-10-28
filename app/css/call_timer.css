@@ -1,0 +1,20 @@
+.call-timer {
+    width: 100px;
+    height: 40px;
+}
+
+.call-timer-background {
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0.3;
+  border-radius: 4px;
+}
+
+.call-timer-foreground {
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 11px;
+}

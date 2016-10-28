@@ -1,0 +1,18 @@
+.nomatch {
+  padding: 50px;
+}
+
+.nomatch > h1 {
+  opacity: 0.5;
+  font-size: 48px;
+}
+
+.nomatch > h2 {
+  opacity: 0.4;
+  font-size: 32px;
+}
+
+.nomatch > h3 {
+  opacity: 0.3;
+  font-size: 24px;
+}

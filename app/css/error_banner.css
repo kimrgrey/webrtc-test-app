@@ -1,0 +1,9 @@
+.error-banner {
+  background-color: white;
+}
+
+.error-banner > h1 {
+  opacity: 0.5;
+  padding: 50px;
+  font-size: 32px;
+}

@@ -1,0 +1,44 @@
+.room-grid-card {
+  width: 250px;
+  height: 250px;
+  background-color: lightgray;
+  position: relative;
+  margin: 20px;
+  border-radius: 3px;
+}
+
+.room-grid-card-caption {
+  width: 100%;
+  height: 60px;
+  margin: 0px;
+  position: absolute;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.room-grid-card-caption.background {
+  background-color: #1565C0;
+}
+
+.room-grid-card-caption.foreground {
+}
+
+.room-grid-card-caption > p {
+  margin: 12px 12px;
+  font-size: 18px;
+  color: white;
+  text-decoration: none;
+}
+
+.room-grid-card-overlay {
+  cursor: pointer;
+  background-color: #FFFFFF;
+  opacity: 0;
+}
+
+.room-grid-card-overlay:hover {
+  opacity: 0.1;
+}

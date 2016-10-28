@@ -31,7 +31,7 @@ class ChatMessageInput extends Component {
     const { message } = this.state;
 
     return (
-      <div className={ classNames('chat-message-input-container') }>
+      <div className={ classNames('chat-message-input-area') }>
         <form
           className={ classNames('chat-message-input-form') }
           onSubmit={ this.handleMessageSubmit }
@@ -45,9 +45,11 @@ class ChatMessageInput extends Component {
             onChange={ this.handleMessageChange }
           />
           <button
-            className={ classNames('chat-message-input-button') }
+            className={ classNames('chat-message-input-button', 'material-icons') }
+            disabled={ message.trim().length === 0 }
             type="submit"
           >
+            send
           </button>
         </form>
       </div>

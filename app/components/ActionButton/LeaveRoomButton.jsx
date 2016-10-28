@@ -4,7 +4,7 @@ import ActionButton from './ActionButton';
 
 const LeaveRoomButton = ({ handleClick }) => (
   <ActionButton
-    types={ [ 'leave-room', 'controls', 'bottom', 'right' ] }
+    types={ [ 'overlay', 'bottom', 'right', 'red' ] }
     icon={ 'call_end' }
     handleClick={ handleClick }
     />

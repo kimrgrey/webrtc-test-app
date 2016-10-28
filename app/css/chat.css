@@ -1,0 +1,115 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 400px;
+  height: 100%;
+  box-shadow: -1px 0px 4px rgba(0, 0, 0, 0.4);
+}
+
+.chat-header-area {
+  flex-grow: 0;
+  width: 100%;
+  height: 80px;
+  background-color: #1565C0;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.chat-header-area > p {
+  font-size: 18px;
+  color: #FFFFFF;
+  margin: 31px 12px;
+}
+
+.chat-message-area {
+  flex-grow: 1;
+  width: 100%;
+  background-color: #E0E0E0;
+}
+
+.chat-message-content {
+  width: 100%;
+  display: flex;
+  padding-top: 20px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chat-message-message {
+  margin: 6px 12px;
+  padding: 10px 12px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.chat-message-message.system {
+  text-align: center;
+  opacity: 0.4;
+}
+
+.chat-message-message.incoming {
+  text-align: left;
+  background-color: #FFFFFF;
+  align-self: flex-start;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.chat-message-message.outcoming {
+  text-align: right;
+  background-color: #1565C0;
+  color: #FFFFFF;
+  align-self: flex-end;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.chat-message-input-area {
+    flex-grow: 0;
+    position: relative;
+    width: 100%;
+    height: 80px;
+    box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.chat-message-input-form {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  align-content: center;
+  justify-content: flex-start;
+}
+
+.chat-message-input {
+  flex-grow: 1;
+  border: none;
+  font-size: 14px;
+  padding: 0px;
+}
+
+.chat-message-input:focus {
+  outline: 0;
+}
+
+.chat-message-input-button {
+  flex-grow: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #1565C0;
+}
+
+.chat-message-input-button:disabled {
+  cursor: default;
+  color: #E0E0E0;
+}
+
+.chat-message-input-button:focus {
+  outline: 0;
+}

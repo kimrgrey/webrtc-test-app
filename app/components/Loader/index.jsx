@@ -2,8 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 
-const Loader = ({ enabled }) => (
-  <div className={ classNames('loader', { enabled }) }></div>
+const Loader = () => (
+  <div className={ classNames('overlay', 'fit', 'fullsize', 'loader') }></div>
 );
 
 export default Loader;

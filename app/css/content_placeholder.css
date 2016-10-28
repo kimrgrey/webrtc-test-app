@@ -1,0 +1,22 @@
+.content-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.content-placeholder-icon {
+  padding: 30px;
+  width: 120px;
+  height: 120px;
+  opacity: 0.2;
+}
+
+.content-placeholder-caption {
+  font-size: 36px;
+  opacity: 0.2;
+}

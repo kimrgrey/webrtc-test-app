@@ -14,9 +14,9 @@ class LocalVideo extends Component {
 
   render() {
     return (
-      <div className={ classNames('local-video-card', 'controls', 'bottom', 'left') }>
+      <div className={ classNames('local-stream-card', 'overlay', 'bottom', 'left') }>
         <video
-          className={ classNames('local-video-card-video') }
+          className={ classNames('local-stream-card-video') }
           autoPlay
           muted
           src={ this.videoSource(this.props.stream) }>

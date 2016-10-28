@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 
 const RoomGridContainer = ({ children }) => (
-  <div className={ classNames('room-grid-container') }>
+  <div className={ classNames('scroll') }>
     { children }
   </div>
 );

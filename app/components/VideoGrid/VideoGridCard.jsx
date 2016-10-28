@@ -14,7 +14,7 @@ class VideoGridCard extends Component {
 
   render() {
     return (
-      <div className={ classNames('video-grid-card') }>
+      <div className={ classNames('grid-item', 'video-grid-card') }>
         <video
           className={ classNames('video-grid-card-video') }
           autoPlay

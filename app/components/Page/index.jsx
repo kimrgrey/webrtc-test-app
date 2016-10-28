@@ -1,7 +1,11 @@
-import Page from './Page';
-import Content from './Content';
+import React from 'react';
+import classNames from 'classnames';
 
-export {
-  Page,
-  Content,
-};
+
+const Page = ({ children }) => (
+  <div className={ classNames('page') }>
+    { children }
+  </div>
+);
+
+export default Page;

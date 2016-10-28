@@ -9,11 +9,12 @@ import {
   createRoomCancel
 } from 'actions/rooms';
 
-import { Content }       from 'components/Page';
 import   Loader          from 'components/Loader';
 import   ErrorBanner     from 'components/ErrorBanner';
 import   ContentPlaceholder from 'components/ContentPlaceholder';
 import   RoomGrid        from 'components/RoomGrid';
+import   Workspace       from 'components/Workspace';
+import   Page            from 'components/Page';
 import { AddRoomButton } from 'components/ActionButton';
 import { AddRoomDialog } from 'components/Dialog';
 
@@ -29,13 +30,29 @@ class RoomsPage extends Component {
     const { error, loading, rooms, creatingRoom } = this.props;
 
     return (
-      <Content>
+      <Page>
         { error &&
-          <ErrorBanner enabled text={ 'Room List Loading Error' } />
+          <ErrorBanner text={ 'Room List Loading Error' } />
         }
+
         { loading &&
-          <Loader enabled />
+          <Loader />
         }
+
+        { !error &&
+          <Workspace>
+            { rooms.length === 0 &&
+              <ContentPlaceholder icon={ roomGridEmpty } text={ 'No Rooms' } />
+            }
+
+            { rooms.length > 0 &&
+              <RoomGrid rooms={ rooms } />
+            }
+
+            <AddRoomButton handleClick={ this.props.createRoom } />
+          </Workspace>
+        }
+
         { creatingRoom &&
           <AddRoomDialog
             opened
@@ -43,14 +60,7 @@ class RoomsPage extends Component {
             handleCancel={ this.props.createRoomCancel }
           />
         }
-        { rooms.length === 0 &&
-          <ContentPlaceholder icon={ roomGridEmpty } text={ 'No Rooms' } />
-        }
-        { rooms.length > 0 &&
-          <RoomGrid rooms={ rooms } />
-        }
-        <AddRoomButton handleClick={ this.props.createRoom } />
-      </Content>
+      </Page>
     );
   }
 }

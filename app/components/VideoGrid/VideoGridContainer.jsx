@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 
 const VideoGridContainer = ({ children }) => (
-  <div className={ classNames('video-grid-container') }>
+  <div className={ classNames('scroll') }>
     { children }
   </div>
 );

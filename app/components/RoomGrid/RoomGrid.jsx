@@ -8,7 +8,7 @@ import RoomGridCard from './RoomGridCard';
 
 const RoomGrid = ({ rooms }) => (
   <RoomGridContainer>
-    <div className={ classNames('room-grid') }>
+    <div className={ classNames('grid', 'fullwidth') }>
       {
         lodash.map(rooms, room => (
           <RoomGridCard key={ room.id } { ...room } />

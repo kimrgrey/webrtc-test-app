@@ -10,13 +10,15 @@ import {
   sendMessage,
 } from 'actions/conference';
 
-import { Content }         from 'components/Page';
 import   Loader            from 'components/Loader';
 import   ErrorBanner       from 'components/ErrorBanner';
 import   ContentPlaceholder from 'components/ContentPlaceholder';
 import   Chat              from 'components/Chat';
 import   LocalVideo        from 'components/LocalVideo';
-import { VideoGrid, VideoGridContainer } from 'components/VideoGrid';
+import   Workspace         from 'components/Workspace';
+import   SideBar           from 'components/SideBar';
+import   Page              from 'components/Page';
+import   VideoGrid         from 'components/VideoGrid';
 import { LeaveRoomButton } from 'components/ActionButton';
 
 import videoGridEmpty from '../../images/video-grid-empty.svg';
@@ -50,35 +52,44 @@ class ConferencePage extends Component {
     const remoteStreams = values(streams.remoteStreams);
 
     return (
-      <Content>
-
+      <Page>
         { error &&
-          <ErrorBanner enabled text={ 'Room Connection Error' } />
+          <ErrorBanner text={ 'Room Connection Error' } />
         }
 
         { loading &&
-          <Loader enabled />
+          <Loader />
         }
 
-        <Chat messages={ messages } handleMessageSubmit={ this.sendMessage } />
+        { !error &&
+          <Workspace>
+            { members.length === 0 &&
+              <ContentPlaceholder icon={ videoGridEmpty } text={ 'No Members' } />
+            }
 
-        <VideoGridContainer>
-          { members.length === 0 &&
-            <ContentPlaceholder icon={ videoGridEmpty } text={ 'No Members' } />
-          }
+            { members.length > 0 &&
+              <VideoGrid streams={ remoteStreams } />
+            }
 
-          { members.length > 0 &&
-            <VideoGrid streams={ remoteStreams } />
-          }
+            { localStream !== null &&
+              <LocalVideo stream={ localStream } />
+            }
 
-          { localStream !== null &&
-            <LocalVideo stream={ localStream } />
-          }
+            <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
+          </Workspace>
+        }
 
-          <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
-        </VideoGridContainer>
-
-      </Content>
+        { !error &&
+          <SideBar type={ 'right' } open>
+            <Chat
+              members={ members }
+              messages={ messages }
+              room={ room }
+              handleMessageSubmit={ this.sendMessage }
+            />
+          </SideBar>
+        }
+      </Page>
     );
   }
 }

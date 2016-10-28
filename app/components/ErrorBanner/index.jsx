@@ -2,8 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 
-const ErrorBanner = ({ enabled, text }) => (
-  <div className={ classNames('error-banner', { enabled }) }>
+const ErrorBanner = ({ text }) => (
+  <div className={ classNames('overlay', 'fit', 'fullsize', 'error-banner') }>
     <h1>{ text }</h1>
   </div>
 );

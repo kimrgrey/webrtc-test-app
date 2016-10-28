@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
+import ChatHeader       from './ChatHeader';
 import ChatMessageArea  from './ChatMessageArea';
 import ChatMessageInput from './ChatMessageInput';
 
 
-const Chat = ({ messages, handleMessageSubmit }) => (
-  <div className={ classNames('chat') }>
-    <ChatMessageArea messages={ messages } />
-    <ChatMessageInput handleMessageSubmit={ handleMessageSubmit } />
-  </div>
-);
+class Chat extends Component {
+  render() {
+    const { room, members, messages, handleMessageSubmit } = this.props;
+
+    return (
+      <div className={ classNames('chat') }>
+        <ChatHeader room={ room } members={ members } />
+        <ChatMessageArea messages={ messages } />
+        <ChatMessageInput handleMessageSubmit={ handleMessageSubmit } />
+      </div>
+    );
+  }
+}
 
 export default Chat;

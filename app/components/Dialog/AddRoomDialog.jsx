@@ -59,16 +59,11 @@ class AddRoomDialog extends Component {
         title={ 'Add Room' }
         buttons={ buttons }
       >
-        <label
-          className={ classNames('dialog-window-label') }
-          htmlFor="room-name-input"
-        >
-          Room Name
-        </label>
         <input
           className={ classNames('dialog-window-input', { invalid, valid }) }
           id="room-name-input"
           autoFocus
+          placeholder={ 'Enter room name' }
           type="text"
           value={ name }
           onChange={ this.handleNameChange }

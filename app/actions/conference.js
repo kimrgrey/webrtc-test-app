@@ -79,6 +79,7 @@ export const addMember = (message) => {
 
   return (dispatch) => {
     dispatch({ type: TYPES.addMember, payload: client });
+    dispatch({ type: TYPES.addRemoteStream, payload: { id: client.id } });
     peersStore.handleClientJoined(message);
   };
 };

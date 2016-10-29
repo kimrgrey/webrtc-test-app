@@ -44,6 +44,16 @@ class ConferencePage extends Component {
     this.props.sendMessage(id, text);
   };
 
+  toggleAudio = (on) => {
+    const { id } = this.props.application;
+    this.props.toggleAudio(id, on);
+  };
+
+  toggleVideo = (on) => {
+    const { id } = this.props.application;
+    this.props.toggleVideo(id, on);
+  };
+
   render() {
     const { messages, room, remoteStreams, localStream } = this.props.conference;
     const { error, loading } = room;
@@ -80,8 +90,8 @@ class ConferencePage extends Component {
 
             <ConferenceControls
               { ...localStream }
-              handleAudioToggle={ this.props.toggleAudio }
-              handleVideoToggle={ this.props.toggleVideo }
+              handleAudioToggle={ this.toggleAudio }
+              handleVideoToggle={ this.toggleVideo }
               handleCallEnd={ this.props.leaveRoomWithRedirect }
             />
           </Workspace>

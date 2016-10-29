@@ -38,8 +38,34 @@ const removeRemoteStream = (state, action) => {
   return { ...state };
 };
 
+const toggleRemoteAudio = (state, action) => {
+  const { sender, on } = action.payload;
+
+  return {
+    ...state,
+    [sender]: {
+      ...state[sender],
+      audioEnabled: on,
+    }
+  };
+};
+
+const toggleRemoteVideo = (state, action) => {
+  const { sender, on } = action.payload;
+
+  return {
+    ...state,
+    [sender]: {
+      ...state[sender],
+      videoEnabled: on,
+    }
+  };
+};
+
 export default composeReducer('conference', {
   leaveRoom,
   addRemoteStream,
   removeRemoteStream,
+  toggleRemoteAudio,
+  toggleRemoteVideo,
 }, initialState);

@@ -28,6 +28,9 @@ const TYPES = createTypes('conference', [
 
   'toggleAudio',
   'toggleVideo',
+
+  'toggleRemoteAudio',
+  'toggleRemoteVideo',
 ]);
 
 export const joinRoom = (id) => {
@@ -129,10 +132,32 @@ export const receiveMessage = (message) => {
   return { type: TYPES.receiveMessage, payload: { sender, text, type } };
 };
 
-export const toggleAudio = (on) => {
-  return { type: TYPES.toggleAudio, payload: { on } };
+export const toggleAudio = (sender, on) => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.toggleAudio, payload: { sender, on } });
+    websocket().emit('toggle-audio', JSON.stringify({
+      sender,
+      on,
+    }));
+  }
 };
 
-export const toggleVideo = (on) => {
-  return { type: TYPES.toggleVideo, payload: { on } };
+export const toggleVideo = (sender, on) => {
+  return (dispatch) => {
+    dispatch({ type: TYPES.toggleVideo, payload: { sender, on } });
+    websocket().emit('toggle-video', JSON.stringify({
+      sender,
+      on,
+    }));
+  };
+};
+
+export const toggleRemoteAudio = (message) => {
+  const { sender, on } = JSON.parse(message);
+  return { type: TYPES.toggleRemoteAudio, payload: { sender, on } };
+};
+
+export const toggleRemoteVideo = (message) => {
+  const { sender, on } = JSON.parse(message);
+  return { type: TYPES.toggleRemoteVideo, payload: { sender, on } };
 };

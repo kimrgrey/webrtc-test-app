@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import VideoGridCardPlaceholder from './VideoGridCardPlaceholder';
+import VideoGridCardFooter      from './VideoGridCardFooter';
 
 
 class VideoGridCard extends Component {
@@ -17,27 +18,35 @@ class VideoGridCard extends Component {
   render() {
     const { streamDescription } = this.props;
 
+    const hasVideo = streamDescription &&
+                     streamDescription.hasVideo &&
+                     streamDescription.videoEnabled;
+
+    const audioEnabled = streamDescription &&
+                         streamDescription.hasAudio &&
+                         streamDescription.audioEnabled;
+    const videoEnabled = streamDescription &&
+                         streamDescription.hasVideo &&
+                         streamDescription.videoEnabled;
+
     return (
       <div className={ classNames('grid-item', 'video-grid-card') }>
-        { !streamDescription &&
-          <VideoGridCardPlaceholder icon={ 'hourglass empty' } />
+        { !hasVideo &&
+          <VideoGridCardPlaceholder icon={ 'person' } />
         }
 
-        { streamDescription && !streamDescription.hasAudio && !streamDescription.hasVideo &&
-          <VideoGridCardPlaceholder icon={ 'chat' } />
-        }
-
-        { streamDescription && streamDescription.hasAudio && !streamDescription.hasVideo &&
-          <VideoGridCardPlaceholder icon={ 'mic' } />
-        }
-
-        { streamDescription && streamDescription.hasVideo &&
+        { hasVideo &&
           <video
             className={ classNames('video-grid-card-video') }
             autoPlay
             src={ this.videoSource(streamDescription.stream) }>
           </video>
         }
+
+        <VideoGridCardFooter
+          audioEnabled={ audioEnabled }
+          videoEnabled={ videoEnabled }
+        />
       </div>
     );
   }

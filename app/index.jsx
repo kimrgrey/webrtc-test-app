@@ -16,19 +16,19 @@ import configureWebsocket from 'utils/configureWebsocket';
 
 import peersStore from 'utils/peersStore';
 
-import 'css/action_button.css'
-import 'css/call_timer.css';
-import 'css/chat.css'
-import 'css/content_placeholder.css'
-import 'css/dialog.css'
-import 'css/error_banner.css'
-import 'css/layout.css'
-import 'css/loader.css'
-import 'css/local_stream.css'
-import 'css/material_icons.css'
-import 'css/no_match.css'
-import 'css/room_grid.css'
-import 'css/video_grid.css'
+import 'css/action_button.css';
+import 'css/chat.css';
+import 'css/conference_controls.css';
+import 'css/content_placeholder.css';
+import 'css/dialog.css';
+import 'css/error_banner.css';
+import 'css/layout.css';
+import 'css/loader.css';
+import 'css/local_stream.css';
+import 'css/material_icons.css';
+import 'css/no_match.css';
+import 'css/room_grid.css';
+import 'css/video_grid.css';
 
 
 const store = configureStore();

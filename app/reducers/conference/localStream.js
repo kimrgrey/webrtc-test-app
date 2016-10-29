@@ -11,8 +11,8 @@ const initialState = {
 const joinRoomSuccess = (state, action) => {
   const { stream } = action.payload;
 
-  const hasAudio = stream.getAudioTracks().length > 0;
-  const hasVideo = stream.getVideoTracks().length > 0;
+  const hasAudio = stream && stream.getAudioTracks().length > 0;
+  const hasVideo = stream && stream.getVideoTracks().length > 0;
 
   const audioTrack = hasAudio ? stream.getAudioTracks()[0] : null;
   const videoTrack = hasAudio ? stream.getVideoTracks()[0] : null;
@@ -41,7 +41,31 @@ const leaveRoom = (state, action) => {
   };
 };
 
+const toggleAudio = (state, action) => {
+  const { on } = action.payload;
+  const { hasAudio, stream } = state;
+
+  if (hasAudio && stream) {
+    stream.getAudioTracks()[0].enabled = on;
+  }
+
+  return { ...state, audioEnabled: on };
+};
+
+const toggleVideo = (state, action) => {
+  const { on } = action.payload;
+  const { hasVideo, stream } = state;
+
+  if (hasVideo && stream) {
+    stream.getVideoTracks()[0].enabled = on;
+  }
+
+  return { ...state, videoEnabled: on };
+};
+
 export default composeReducer('conference', {
   joinRoomSuccess,
   leaveRoom,
+  toggleAudio,
+  toggleVideo,
 }, initialState);

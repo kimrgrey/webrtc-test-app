@@ -25,6 +25,9 @@ const TYPES = createTypes('conference', [
 
   'sendMessage',
   'receiveMessage',
+
+  'toggleAudio',
+  'toggleVideo',
 ]);
 
 export const joinRoom = (id) => {
@@ -123,4 +126,12 @@ export const receiveMessage = (message) => {
   const type = 'incoming';
 
   return { type: TYPES.receiveMessage, payload: { sender, text, type } };
+};
+
+export const toggleAudio = (on) => {
+  return { type: TYPES.toggleAudio, payload: { on } };
+};
+
+export const toggleVideo = (on) => {
+  return { type: TYPES.toggleVideo, payload: { on } };
 };

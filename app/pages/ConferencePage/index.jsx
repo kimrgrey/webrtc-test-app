@@ -8,6 +8,8 @@ import {
   leaveRoom,
   leaveRoomWithRedirect,
   sendMessage,
+  toggleAudio,
+  toggleVideo,
 } from 'actions/conference';
 
 import   Loader            from 'components/Loader';
@@ -15,12 +17,11 @@ import   ErrorBanner       from 'components/ErrorBanner';
 import   ContentPlaceholder from 'components/ContentPlaceholder';
 import   Chat              from 'components/Chat';
 import   LocalVideo        from 'components/LocalVideo';
-import   CallTimer         from 'components/CallTimer';
+import   ConferenceControls from 'components/ConferenceControls';
 import   Workspace         from 'components/Workspace';
 import   SideBar           from 'components/SideBar';
 import   Page              from 'components/Page';
 import   VideoGrid         from 'components/VideoGrid';
-import { LeaveRoomButton } from 'components/ActionButton';
 
 import videoGridEmpty from '../../images/video-grid-empty.svg';
 
@@ -60,7 +61,7 @@ class ConferencePage extends Component {
           <Loader />
         }
 
-        { !error &&
+        { !error && !loading &&
           <Workspace>
             { members.length === 0 &&
               <ContentPlaceholder
@@ -74,16 +75,20 @@ class ConferencePage extends Component {
               <VideoGrid streams={ remoteStreams } />
             }
 
-            { localStream !== null &&
+            { localStream && localStream.hasVideo &&
               <LocalVideo streamDescription={ localStream } />
             }
 
-            <CallTimer />
-            <LeaveRoomButton handleClick={ this.props.leaveRoomWithRedirect } />
+            <ConferenceControls
+              { ...localStream }
+              handleAudioToggle={ this.props.toggleAudio }
+              handleVideoToggle={ this.props.toggleVideo }
+              handleCallEnd={ this.props.leaveRoomWithRedirect }
+            />
           </Workspace>
         }
 
-        { !error &&
+        { !error && !loading &&
           <SideBar type={ 'right' } open>
             <Chat
               members={ members }
@@ -109,6 +114,8 @@ const mapDispatchToProps = (dispatch) => {
     leaveRoom,
     leaveRoomWithRedirect,
     sendMessage,
+    toggleAudio,
+    toggleVideo,
   }, dispatch);
 };
 

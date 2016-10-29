@@ -33,7 +33,7 @@ class ConferencePage extends Component {
   }
 
   componentWillUnmount() {
-    const { room, streams, localStream } = this.props.conference;
+    const { room, localStream } = this.props.conference;
     const { description } = room;
 
     description.id && this.props.leaveRoom(description.id, localStream);
@@ -45,11 +45,10 @@ class ConferencePage extends Component {
   };
 
   render() {
-    const { messages, room, streams, localStream } = this.props.conference;
+    const { messages, room, remoteStreams, localStream } = this.props.conference;
     const { error, loading } = room;
 
     const members = values(this.props.conference.members);
-    const remoteStreams = values(streams.remoteStreams);
 
     return (
       <Page>
@@ -72,7 +71,7 @@ class ConferencePage extends Component {
             }
 
             { members.length > 0 &&
-              <VideoGrid streams={ remoteStreams } />
+              <VideoGrid members={ members } streamDescriptions={ remoteStreams } />
             }
 
             { localStream && localStream.hasVideo &&

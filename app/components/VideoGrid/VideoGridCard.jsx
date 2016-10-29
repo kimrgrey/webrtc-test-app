@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 class VideoGridCard extends Component {
   shouldComponentUpdate = (nextProps, nextState) => (
-    this.props.stream !== nextProps.stream
+    this.props.streamDescription !== nextProps.streamDescription
   );
 
   videoSource = (stream) => {
@@ -13,13 +13,17 @@ class VideoGridCard extends Component {
   };
 
   render() {
+    const { streamDescription } = this.props;
+
     return (
       <div className={ classNames('grid-item', 'video-grid-card') }>
-        <video
-          className={ classNames('video-grid-card-video') }
-          autoPlay
-          src={ this.videoSource(this.props.stream) }>
-        </video>
+        { streamDescription &&
+          <video
+            className={ classNames('video-grid-card-video') }
+            autoPlay
+            src={ this.videoSource(streamDescription.stream) }>
+          </video>
+        }
       </div>
     );
   }

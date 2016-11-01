@@ -20,8 +20,9 @@ const TYPES = createTypes('conference', [
   'removeMember',
   'processWebRTC',
 
-  'addRemoteStream',
-  'removeRemoteStream',
+  'addRemoteConnection',
+  'updateRemoteConnection',
+  'removeRemoteConnection',
 
   'sendMessage',
   'receiveMessage',
@@ -82,7 +83,6 @@ export const addMember = (message) => {
 
   return (dispatch) => {
     dispatch({ type: TYPES.addMember, payload: client });
-    dispatch({ type: TYPES.addRemoteStream, payload: { id: client.id } });
     peersStore.handleClientJoined(message);
   };
 };
@@ -91,19 +91,22 @@ export const removeMember = (message) => {
   const client = JSON.parse(message);
 
   return (dispatch) => {
-    dispatch({ type: TYPES.removeRemoteStream, payload: { id: client.id } });
     dispatch({ type: TYPES.removeMember, payload: client });
 
     peersStore.handleClientLeft(message);
   };
 };
 
-export const addRemoteStream = (remoteStream) => {
-  return { type: TYPES.addRemoteStream, payload: remoteStream };
+export const addRemoteConnection = (connection) => {
+  return { type: TYPES.addRemoteConnection, payload: connection };
 };
 
-export const removeRemoteStream = (remoteStream) => {
-  return { type: TYPES.removeRemoteStream, payload: remoteStream };
+export const updateRemoteConnection = (connection) => {
+  return { type: TYPES.updateRemoteConnection, payload: connection };
+};
+
+export const removeRemoteConnection = (connection) => {
+  return { type: TYPES.removeRemoteConnection, payload: connection };
 };
 
 export const processWebRTC = (message) => {

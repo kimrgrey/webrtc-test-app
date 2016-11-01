@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import VideoGridCardPlaceholder from './VideoGridCardPlaceholder';
+import VideoGridCardMedia       from './VideoGridCardMedia';
 import VideoGridCardFooter      from './VideoGridCardFooter';
 
 
 class VideoGridCard extends Component {
-  shouldComponentUpdate = (nextProps, nextState) => (
-    this.props.streamDescription !== nextProps.streamDescription
-  );
-
   videoSource = (stream) => {
     return window.URL ? window.URL.createObjectURL(stream)
                       : stream;
@@ -17,6 +14,9 @@ class VideoGridCard extends Component {
 
   render() {
     const { streamDescription } = this.props;
+
+    const loading = streamDescription &&
+                    streamDescription.loading;
 
     const hasVideo = streamDescription &&
                      streamDescription.hasVideo &&
@@ -31,22 +31,24 @@ class VideoGridCard extends Component {
 
     return (
       <div className={ classNames('grid-item', 'video-grid-card') }>
-        { !hasVideo &&
+        { loading &&
+          <VideoGridCardPlaceholder icon={ 'hourglass empty' } />
+        }
+
+        { !loading && !hasVideo &&
           <VideoGridCardPlaceholder icon={ 'person' } />
         }
 
-        { hasVideo &&
-          <video
-            className={ classNames('video-grid-card-video') }
-            autoPlay
-            src={ this.videoSource(streamDescription.stream) }>
-          </video>
+        { !loading && hasVideo &&
+          <VideoGridCardMedia stream={ streamDescription.stream } />
         }
 
-        <VideoGridCardFooter
-          audioEnabled={ audioEnabled }
-          videoEnabled={ videoEnabled }
-        />
+        { !loading &&
+          <VideoGridCardFooter
+            audioEnabled={ audioEnabled }
+            videoEnabled={ videoEnabled }
+          />
+        }
       </div>
     );
   }

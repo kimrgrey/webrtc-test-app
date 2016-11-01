@@ -1,7 +1,11 @@
-import config from 'config';
 import websocket from 'utils/websocket';
+import auth from 'utils/auth';
 
-import { addRemoteStream } from 'actions/conference';
+import {
+  addRemoteConnection,
+  updateRemoteConnection,
+  removeRemoteConnection,
+} from 'actions/conference';
 
 const sdpConstraints = {
   mandatory: {
@@ -41,10 +45,12 @@ const setLocalId = (id) => {
   peersStore.localId = id;
 };
 
-const createConnection = (remoteId) => {
-  const pc = new RTCPeerConnection(config.peerConnectionConfig);
+const createPeerConnection = (remoteId, iceServers) => {
+  const pc = new RTCPeerConnection({ iceServers });
 
   peersStore.connections[remoteId] = pc;
+
+  peersStore.dispatch(addRemoteConnection({ id: remoteId }))
 
   if (peersStore.localStream) {
     if (pc.addTrack) {
@@ -57,6 +63,25 @@ const createConnection = (remoteId) => {
     }
   }
 
+  pc.oniceconnectionstatechange = (event) => {
+    console.log('ice connection state change', pc.iceConnectionState);
+
+    // TODO: handle connection errors
+    switch (pc.iceConnectionState) {
+      case 'connected':
+        peersStore.dispatch(updateRemoteConnection({ id: remoteId, loading: false }));
+        break;
+      case 'new':
+      case 'checking':
+      case 'completed':
+      case 'failed':
+      case 'disconnected':
+      case 'closed':
+      default:
+        break;
+    }
+  };
+
   pc.onicecandidate = (event) => {
     if (event.candidate) {
       websocket().emit('webrtc', JSON.stringify({
@@ -68,27 +93,51 @@ const createConnection = (remoteId) => {
     }
   };
 
+  pc.onnegotiationneeded = (event) => {
+    // TODO: deal with peer connection negotiation
+    // createOffer(remoteId);
+    console.log('peer connection negotiation needed');
+  };
+
   if (pc.addTrack) {
     pc.ontrack = (event) => {
       const stream = event.streams[0];
       peersStore.remoteStreams[remoteId] = stream;
-      peersStore.dispatch(addRemoteStream({ id: remoteId, stream }));
+      peersStore.dispatch(updateRemoteConnection({ id: remoteId, stream }));
     };
   }
   else {
     pc.onaddstream = (event) => {
       const { stream } = event;
       peersStore.remoteStreams[remoteId] = stream;
-      peersStore.dispatch(addRemoteStream({ id: remoteId, stream }));
+      peersStore.dispatch(updateRemoteConnection({ id: remoteId, stream }));
     };
   }
 
   return pc;
 };
 
+const getPeerConnection = (remoteId) => {
+  if (remoteId in peersStore.connections) {
+    return new Promise(resolve => resolve(peersStore.connections[remoteId]));
+  }
+  else {
+    return auth.fetch(peersStore.localId)
+      .then(iceServers => {
+        return createPeerConnection(remoteId, iceServers);
+      })
+      .catch(error => {
+        console.log(error);
+        return null;
+      });
+  }
+};
+
 const destroyConnection = (remoteId) => {
   const remoteConnection = peersStore.connections[remoteId];
   const remoteStream = peersStore.remoteStreams[remoteId];
+
+  peersStore.dispatch(removeRemoteConnection({ id: remoteId }));
 
   if (remoteStream) {
     remoteStream.getTracks().forEach((track) => track.stop());
@@ -107,30 +156,41 @@ const destroyConnection = (remoteId) => {
   }
 };
 
+const createOffer = (remoteId) => {
+  const remoteConnection = peersStore.connections[remoteId];
+
+  if (remoteConnection) {
+    remoteConnection.createOffer(sdpConstraints)
+      .then((offer) => ( remoteConnection.setLocalDescription(offer) ))
+      .then(() => {
+        console.log('sending video offer to', remoteId);
+        websocket().emit('webrtc', JSON.stringify({
+          type: 'video-offer',
+          sender: peersStore.localId,
+          receiver: remoteId,
+          sdp: remoteConnection.localDescription,
+        }));
+      })
+      .catch((desc) => {
+        console.log('handle client join error:', desc);
+      });
+  }
+};
+
 const handleClientJoined = (message) => {
   const remoteId = JSON.parse(message).id;
 
   console.log('client joined', remoteId);
 
-  const remoteConnection = createConnection(remoteId);
+  getPeerConnection(remoteId)
+    .then(remoteConnection => {
+      if (!remoteConnection) {
+        console.log('remote connection creation error');
+        return;
+      }
 
-  // TODO: deal with RTCPeerConnection.negotiationneeded
-  // remoteConnection.negotiationneeded = (event) => {
-  remoteConnection.createOffer(sdpConstraints)
-    .then((offer) => ( remoteConnection.setLocalDescription(offer) ))
-    .then(() => {
-      console.log('sending video offer to', remoteId);
-      websocket().emit('webrtc', JSON.stringify({
-        type: 'video-offer',
-        sender: peersStore.localId,
-        receiver: remoteId,
-        sdp: remoteConnection.localDescription,
-      }));
-    })
-    .catch((desc) => {
-      console.log('handle client join error:', desc);
+      createOffer(remoteId);
     });
-  // };
 };
 
 const handleClientLeft = (message) => {
@@ -152,32 +212,43 @@ const handleWebRTCMessage = (message) => {
   switch (type) {
     case 'video-offer':
       console.log('video offer received from', sender);
-      remoteConnection = createConnection(sender);
 
-      remoteConnection.setRemoteDescription(new RTCSessionDescription(sdp))
-        .then(() => ( remoteConnection.createAnswer(sdpConstraints) ))
-        .then((answer) => remoteConnection.setLocalDescription(answer))
-        .then(() => {
-          console.log('sending video answer to', sender);
-          websocket().emit('webrtc', JSON.stringify({
-            type: 'video-answer',
-            sender: peersStore.localId,
-            receiver: sender,
-            sdp: remoteConnection.localDescription,
-          }));
-        })
-        .catch((error) => {
-          console.log('video offer error:', error);
+      getPeerConnection(sender)
+        .then(remoteConnection => {
+          if (!remoteConnection) {
+            console.log('remote connection creation error');
+            return;
+          }
+
+          remoteConnection.setRemoteDescription(new RTCSessionDescription(sdp))
+            .then(() => ( remoteConnection.createAnswer(sdpConstraints) ))
+            .then((answer) => remoteConnection.setLocalDescription(answer))
+            .then(() => {
+              console.log('sending video answer to', sender);
+              websocket().emit('webrtc', JSON.stringify({
+                type: 'video-answer',
+                sender: peersStore.localId,
+                receiver: sender,
+                sdp: remoteConnection.localDescription,
+              }));
+            })
+            .catch((error) => {
+              console.log('video offer error:', error);
+            });
         });
+
       break;
     case 'video-answer':
       console.log('video answer received from', sender);
       remoteConnection = peersStore.connections[sender];
       if (remoteConnection) {
         remoteConnection.setRemoteDescription(new RTCSessionDescription(sdp))
-        .catch((error) => {
-          console.log('video answer error:', error);
-        });
+          .then(() => {
+            peersStore.dispatch(updateRemoteConnection({ id: sender, loading: false }));
+          })
+          .catch((error) => {
+            console.log('video answer error:', error);
+          });
       }
       break;
     case 'new-ice-candidate':

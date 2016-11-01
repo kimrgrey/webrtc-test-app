@@ -6,7 +6,7 @@ const injectSocketIo = (callback) => {
   script.onload = () => {
     callback();
   };
-  script.src = config.apiUrl + "/socket.io/socket.io.js";
+  script.src = config.wsUrl + "/socket.io/socket.io.js";
 
   document.getElementsByTagName('head')[0].appendChild(script);
 };

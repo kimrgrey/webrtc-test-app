@@ -2,12 +2,30 @@ import { composeReducer } from 'redux-compose-reducer';
 
 const initialState = {};
 
-const leaveRoom = (state, action) => {
-  return {};
+const addRemoteConnection = (state, action) => {
+  const { id } = action.payload;
+
+  return {
+    ...state,
+    [id] : {
+      loading: true,
+      hasAudio: false,
+      hasVideo: false,
+      audioEnabled: false,
+      videoEnabled: false,
+      stream: null,
+    }
+  };
 };
 
-const addRemoteStream = (state, action) => {
-  const { id, stream } = action.payload;
+const updateRemoteConnection = (state, action) => {
+  const connectionParams = action.payload;
+  const connection = state[connectionParams.id];
+
+  const {
+    loading = connection.loading,
+    stream = connection.stream
+  } = connectionParams;
 
   const hasAudio = stream && stream.getAudioTracks().length > 0;
   const hasVideo = stream && stream.getVideoTracks().length > 0;
@@ -20,7 +38,9 @@ const addRemoteStream = (state, action) => {
 
   return {
     ...state,
-    [id] : {
+    [connectionParams.id]: {
+      ...connection,
+      loading,
       hasAudio,
       hasVideo,
       audioEnabled,
@@ -30,7 +50,7 @@ const addRemoteStream = (state, action) => {
   };
 };
 
-const removeRemoteStream = (state, action) => {
+const removeRemoteConnection = (state, action) => {
   const { id } = action.payload;
 
   delete state[id];
@@ -63,9 +83,9 @@ const toggleRemoteVideo = (state, action) => {
 };
 
 export default composeReducer('conference', {
-  leaveRoom,
-  addRemoteStream,
-  removeRemoteStream,
+  addRemoteConnection,
+  updateRemoteConnection,
+  removeRemoteConnection,
   toggleRemoteAudio,
   toggleRemoteVideo,
 }, initialState);

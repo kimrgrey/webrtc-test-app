@@ -3,6 +3,8 @@ import config from 'config';
 
 const credentialsStore = {};
 
+var runningRequest = null;
+
 const auth = axios.create({
   baseURL: config.authUrl,
   timeout: 3000,
@@ -18,13 +20,16 @@ const credentialsValid = () => (
 );
 
 const fetch = (userId) => {
-  if (credentialsValid()) {
+  if (runningRequest) {
+    return runningRequest;
+  }
+  else if (credentialsValid()) {
     return new Promise((resolve) => {
       resolve(credentialsStore.iceServers);
     });
   }
   else {
-    return auth.get('/', {
+    runningRequest = auth.get('/', {
       params: {
         username: userId
       }
@@ -32,11 +37,15 @@ const fetch = (userId) => {
     .then(({ data }) => {
       const { iceServers, expires } = data;
 
+      runningRequest = null;
+
       credentialsStore.iceServers = iceServers;
       credentialsStore.expires = expires;
 
       return credentialsStore.iceServers;
-    })
+    });
+
+    return runningRequest;
   }
 };
 

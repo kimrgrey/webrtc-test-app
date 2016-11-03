@@ -5,17 +5,18 @@ const initialState = {
   hasVideo: false,
   audioEnabled: false,
   videoEnabled: false,
-  stream: null,
+  mainStream: null,
+  previewStream: null,
 };
 
 const joinRoomSuccess = (state, action) => {
-  const { stream } = action.payload;
+  const { mainStream, previewStream } = action.payload;
 
-  const hasAudio = stream && stream.getAudioTracks().length > 0;
-  const hasVideo = stream && stream.getVideoTracks().length > 0;
+  const hasAudio = mainStream && mainStream.getAudioTracks().length > 0;
+  const hasVideo = mainStream && mainStream.getVideoTracks().length > 0;
 
-  const audioTrack = hasAudio ? stream.getAudioTracks()[0] : null;
-  const videoTrack = hasAudio ? stream.getVideoTracks()[0] : null;
+  const audioTrack = hasAudio ? mainStream.getAudioTracks()[0] : null;
+  const videoTrack = hasAudio ? mainStream.getVideoTracks()[0] : null;
 
   const audioEnabled = audioTrack ? audioTrack.enabled : false;
   const videoEnabled = videoTrack ? videoTrack.enabled : false;
@@ -26,7 +27,8 @@ const joinRoomSuccess = (state, action) => {
     hasVideo,
     audioEnabled,
     videoEnabled,
-    stream,
+    mainStream,
+    previewStream,
   };
 };
 
@@ -37,16 +39,17 @@ const leaveRoom = (state, action) => {
     hasVideo: false,
     audioEnabled: false,
     videoEnabled: false,
-    stream: null,
+    mainStream: null,
+    previewStream: null,
   };
 };
 
 const toggleAudio = (state, action) => {
   const { on } = action.payload;
-  const { hasAudio, stream } = state;
+  const { hasAudio, mainStream } = state;
 
-  if (hasAudio && stream) {
-    stream.getAudioTracks()[0].enabled = on;
+  if (hasAudio && mainStream) {
+    mainStream.getAudioTracks()[0].enabled = on;
   }
 
   return { ...state, audioEnabled: on };
@@ -54,10 +57,10 @@ const toggleAudio = (state, action) => {
 
 const toggleVideo = (state, action) => {
   const { on } = action.payload;
-  const { hasVideo, stream } = state;
+  const { hasVideo, mainStream } = state;
 
-  if (hasVideo && stream) {
-    stream.getVideoTracks()[0].enabled = on;
+  if (hasVideo && mainStream) {
+    mainStream.getVideoTracks()[0].enabled = on;
   }
 
   return { ...state, videoEnabled: on };

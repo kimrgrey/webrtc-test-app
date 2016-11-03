@@ -33,10 +33,10 @@ class ConferencePage extends Component {
   }
 
   componentWillUnmount() {
-    const { room, localStream } = this.props.conference;
+    const { room } = this.props.conference;
     const { description } = room;
 
-    description.id && this.props.leaveRoom(description.id, localStream);
+    description.id && this.props.leaveRoom();
   }
 
   sendMessage = (text) => {

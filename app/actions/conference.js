@@ -43,26 +43,32 @@ export const joinRoom = (id) => {
 
     api.get('/rooms/' + id)
       .then(({ data }) => { payload.room = data })
-      .then(()         => ( localStream.getLocalStream().catch(() => (null)) ))
-      .then((stream)   => {
-        payload.stream = stream;
+      .then(()         => localStream.getVideo())
+      .then(stream     => stream || localStream.getAudio())
+      .then(stream     => {
+        payload.mainStream = stream;
         peersStore.setLocalStream(stream);
+      })
+      .then(()         => localStream.getLocalVideo())
+      .then(stream     => {
+        payload.previewStream = stream;
       })
       .then(()         => websocket().emit('join', JSON.stringify({ id })))
       .then(()         => dispatch({ type: TYPES.joinRoomSuccess, payload }))
-      .catch(()        => {
-        localStream.closeLocalStream(payload.localStream);
+      .catch(e         => {
+        console.log(e);
+        localStream.close();
         peersStore.cleanup();
         dispatch({ type: TYPES.joinRoomFailure })
       });
   };
 };
 
-export const leaveRoom = (roomId, stream) => {
+export const leaveRoom = () => {
   return (dispatch) => {
     dispatch({ type: TYPES.leaveRoom });
     peersStore.cleanup();
-    localStream.closeLocalStream(stream.stream);
+    localStream.close();
     websocket().emit('leave');
   };
 };

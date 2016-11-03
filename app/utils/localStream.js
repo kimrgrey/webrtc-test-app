@@ -1,22 +1,80 @@
 import config from 'config';
+import lodash from 'lodash';
 
-const getLocalStream = () => {
-  return navigator.mediaDevices.getUserMedia(config.mediaConstraints)
+
+const streams = {};
+
+const getVideo = () => {
+  const constraints = config.mediaConstraints;
+
+  return navigator
+    .mediaDevices
+    .getUserMedia(constraints)
+    .then(stream => {
+      streams[stream.id] = stream;
+
+      return stream;
+    })
     .catch(e => {
-      return navigator.mediaDevices.getUserMedia({
-        ...config.mediaConstraints,
-        video: false,
-      });
+      console.log(e);
+      return null;
     });
 };
 
-const closeLocalStream = (stream) => {
-  if (stream) {
-    stream.getTracks().forEach((t) => t.stop());
-  }
+const getAudio = () => {
+  const constraints = {
+    ...config.mediaConstraints,
+    video: false,
+  };
+
+  return navigator
+    .mediaDevices
+    .getUserMedia(constraints)
+    .then(stream => {
+      streams[stream.id] = stream;
+
+      return stream;
+    })
+    .catch(e => {
+      console.log(e);
+      return null;
+    });
+};
+
+const getLocalVideo = () => {
+  const constraints = {
+    ...config.mediaConstraints,
+    audio: false,
+    video: {
+      ...config.mediaConstraints.video,
+      width: 177,
+      height: 100
+    }
+  };
+
+  return navigator
+    .mediaDevices
+    .getUserMedia(constraints)
+    .then(stream => {
+      streams[stream.id] = stream;
+
+      return stream;
+    })
+    .catch(e => {
+      console.log(e);
+      return null;
+    });
+};
+
+const close = () => {
+  lodash.values(streams).forEach(stream => {
+    stream.getTracks().forEach(track => track.stop());
+  });
 };
 
 export default {
-  getLocalStream,
-  closeLocalStream,
+  getVideo,
+  getAudio,
+  getLocalVideo,
+  close,
 };

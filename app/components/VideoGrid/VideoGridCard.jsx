@@ -15,8 +15,8 @@ class VideoGridCard extends Component {
   render() {
     const { streamDescription } = this.props;
 
-    const loading = streamDescription &&
-                    streamDescription.loading;
+    const connected = streamDescription &&
+                     !streamDescription.loading;
 
     const hasVideo = streamDescription &&
                      streamDescription.hasVideo &&
@@ -31,19 +31,19 @@ class VideoGridCard extends Component {
 
     return (
       <div className={ classNames('grid-item', 'video-grid-card') }>
-        { loading &&
-          <VideoGridCardPlaceholder icon={ 'hourglass empty' } />
+        { !connected &&
+          <VideoGridCardPlaceholder icon={ 'hourglass_empty' } />
         }
 
-        { !loading && !hasVideo &&
+        { connected && !hasVideo &&
           <VideoGridCardPlaceholder icon={ 'person' } />
         }
 
-        { !loading && hasVideo &&
+        { connected && hasVideo &&
           <VideoGridCardMedia stream={ streamDescription.stream } />
         }
 
-        { !loading &&
+        { connected &&
           <VideoGridCardFooter
             audioEnabled={ audioEnabled }
             videoEnabled={ videoEnabled }

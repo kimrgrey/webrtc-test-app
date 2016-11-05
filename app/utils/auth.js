@@ -1,7 +1,10 @@
 import axios from 'axios';
 import config from 'config';
 
-const credentialsStore = {};
+const credentialsStore = {
+  iceServers: {},
+  expires: -1,
+};
 
 var runningRequest = null;
 
@@ -43,12 +46,22 @@ const fetch = (userId) => {
       credentialsStore.expires = expires;
 
       return credentialsStore.iceServers;
+    })
+    .catch(error => {
+      runningRequest = null;
+      throw error;
     });
 
     return runningRequest;
   }
 };
 
+const reset = () => {
+  credentialsStore.iceServers = {};
+  credentialsStore.expires = -1;
+};
+
 module.exports = {
-  fetch
+  fetch,
+  reset,
 };

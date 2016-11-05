@@ -66,20 +66,25 @@ const createPeerConnection = (remoteId, iceServers) => {
   pc.oniceconnectionstatechange = (event) => {
     console.log('ice connection state change', pc.iceConnectionState);
 
-    // TODO: handle connection errors
     switch (pc.iceConnectionState) {
       case 'connected':
         peersStore.dispatch(updateRemoteConnection({ id: remoteId, loading: false }));
         break;
+      case 'failed':
+        reconnect(remoteId);
+        break;
       case 'new':
       case 'checking':
       case 'completed':
-      case 'failed':
       case 'disconnected':
       case 'closed':
       default:
         break;
     }
+  };
+
+  pc.onsignalingstatechange = (event) => {
+    console.log('signaling state change', pc.signalingState);
   };
 
   pc.onicecandidate = (event) => {
@@ -93,10 +98,18 @@ const createPeerConnection = (remoteId, iceServers) => {
     }
   };
 
+  // FIXME: quite ugly hack
+  // disable sending offer for connections, created from remote video offer
+  pc.realyNeedNegotiation = false;
+
   pc.onnegotiationneeded = (event) => {
-    // TODO: deal with peer connection negotiation
-    // createOffer(remoteId);
-    console.log('peer connection negotiation needed');
+    if (pc.realyNeedNegotiation) {
+      console.log('peer connection negotiation needed');
+      createOffer(remoteId);
+    }
+    else {
+      pc.realyNeedNegotiation = true;
+    }
   };
 
   if (pc.addTrack) {
@@ -113,6 +126,11 @@ const createPeerConnection = (remoteId, iceServers) => {
       peersStore.dispatch(updateRemoteConnection({ id: remoteId, stream }));
     };
   }
+
+  pc.onremovestream = (event) => {
+    peersStore.remoteStreams[remoteId] = null;
+    peersStore.dispatch(updateRemoteConnection({ id: remoteId, stream: null }));
+  };
 
   return pc;
 };
@@ -161,9 +179,12 @@ const createOffer = (remoteId) => {
 
   if (remoteConnection) {
     remoteConnection.createOffer(sdpConstraints)
-      .then((offer) => ( remoteConnection.setLocalDescription(offer) ))
-      .then(() => {
+      .then(offer  => {
+        return remoteConnection.setLocalDescription(offer);
+      })
+      .then(()     => {
         console.log('sending video offer to', remoteId);
+
         websocket().emit('webrtc', JSON.stringify({
           type: 'video-offer',
           sender: peersStore.localId,
@@ -171,10 +192,28 @@ const createOffer = (remoteId) => {
           sdp: remoteConnection.localDescription,
         }));
       })
-      .catch((desc) => {
-        console.log('handle client join error:', desc);
+      .catch(error => {
+        console.log('offer creation error:', error);
       });
   }
+};
+
+const reconnect = (remoteId) => {
+  destroyConnection(remoteId);
+
+  auth.reset();
+
+  getPeerConnection(remoteId)
+    .then(remoteConnection => {
+      if (!remoteConnection) {
+        console.log('reconnection error');
+        return;
+      }
+
+      console.log('reconnection done');
+
+      createOffer(remoteId);
+    });
 };
 
 const handleClientJoined = (client) => {
@@ -221,8 +260,8 @@ const handleWebRTCMessage = (message) => {
           }
 
           remoteConnection.setRemoteDescription(new RTCSessionDescription(sdp))
-            .then(() => ( remoteConnection.createAnswer(sdpConstraints) ))
-            .then((answer) => remoteConnection.setLocalDescription(answer))
+            .then(() => remoteConnection.createAnswer(sdpConstraints))
+            .then(answer => remoteConnection.setLocalDescription(answer))
             .then(() => {
               console.log('sending video answer to', sender);
               websocket().emit('webrtc', JSON.stringify({
@@ -232,7 +271,7 @@ const handleWebRTCMessage = (message) => {
                 sdp: remoteConnection.localDescription,
               }));
             })
-            .catch((error) => {
+            .catch(error => {
               console.log('video offer error:', error);
             });
         });
@@ -246,7 +285,7 @@ const handleWebRTCMessage = (message) => {
           .then(() => {
             peersStore.dispatch(updateRemoteConnection({ id: sender, loading: false }));
           })
-          .catch((error) => {
+          .catch(error => {
             console.log('video answer error:', error);
           });
       }
@@ -256,7 +295,7 @@ const handleWebRTCMessage = (message) => {
       remoteConnection = peersStore.connections[sender];
       if (remoteConnection) {
         remoteConnection.addIceCandidate(new RTCIceCandidate(candidate))
-          .catch((error) => {
+          .catch(error => {
             console.log('ice candidate add error:', error);
           });
       }

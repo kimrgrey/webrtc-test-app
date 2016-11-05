@@ -177,8 +177,8 @@ const createOffer = (remoteId) => {
   }
 };
 
-const handleClientJoined = (message) => {
-  const remoteId = JSON.parse(message).id;
+const handleClientJoined = (client) => {
+  const remoteId = client.id;
 
   console.log('client joined', remoteId);
 
@@ -193,8 +193,8 @@ const handleClientJoined = (message) => {
     });
 };
 
-const handleClientLeft = (message) => {
-  const remoteId = JSON.parse(message).id;
+const handleClientLeft = (client) => {
+  const remoteId = client.id;
 
   console.log('client left', remoteId);
 

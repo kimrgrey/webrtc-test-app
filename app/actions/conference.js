@@ -1,5 +1,6 @@
 import { createTypes } from 'redux-compose-reducer';
 import { push } from 'react-router-redux';
+import lodash from 'lodash';
 import api from 'utils/api';
 import websocket from 'utils/websocket';
 import localStream from 'utils/localStream';
@@ -81,16 +82,20 @@ export const leaveRoomWithRedirect = () => {
 };
 
 export const storeMembers = (message) => {
-  return { type: TYPES.storeMembers, payload: JSON.parse(message) };
+  const members = JSON.parse(message);
+
+  return (dispatch) => {
+    dispatch({ type: TYPES.storeMembers, payload: members });
+
+    lodash.values(members).forEach(member => {
+      peersStore.handleClientJoined(member);
+    });
+  };
 };
 
 export const addMember = (message) => {
   const client = JSON.parse(message);
-
-  return (dispatch) => {
-    dispatch({ type: TYPES.addMember, payload: client });
-    peersStore.handleClientJoined(message);
-  };
+  return { type: TYPES.addMember, payload: client };
 };
 
 export const removeMember = (message) => {
@@ -99,7 +104,7 @@ export const removeMember = (message) => {
   return (dispatch) => {
     dispatch({ type: TYPES.removeMember, payload: client });
 
-    peersStore.handleClientLeft(message);
+    peersStore.handleClientLeft(client);
   };
 };
 

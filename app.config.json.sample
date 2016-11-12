@@ -1,6 +1,7 @@
 {
   "apiUrl": "http://localhost:3000",
   "wsUrl": "http://localhost:3000",
+  "wsPath": "/socket.io",
   "authUrl": "http://localhost:3001",
   "mediaConstraints": {
     "audio": true,

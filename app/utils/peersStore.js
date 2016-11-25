@@ -159,6 +159,7 @@ const destroyConnection = (remoteId) => {
 
   if (remoteStream) {
     remoteStream.getTracks().forEach((track) => track.stop());
+    delete peersStore.remoteStreams[remoteId];
   }
 
   if (remoteConnection) {
@@ -171,6 +172,8 @@ const destroyConnection = (remoteId) => {
     remoteConnection.onnegotiationneeded = null;
 
     remoteConnection.close();
+
+    delete peersStore.connections[remoteId];
   }
 };
 

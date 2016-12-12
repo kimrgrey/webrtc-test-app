@@ -3,6 +3,7 @@
   "wsUrl": "http://localhost:3000",
   "wsPath": "/socket.io",
   "authUrl": "http://localhost:3001",
+  "realm": "realm1",
   "mediaConstraints": {
     "audio": true,
     "video": {

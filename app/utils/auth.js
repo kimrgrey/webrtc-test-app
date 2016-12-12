@@ -34,7 +34,8 @@ const fetch = (userId) => {
   else {
     runningRequest = auth.get('/', {
       params: {
-        username: userId
+        username: userId,
+        realm: config.realm
       }
     })
     .then(({ data }) => {
